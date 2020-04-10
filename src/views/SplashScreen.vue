@@ -13,7 +13,7 @@ export default {
   name: "SplashScreen",
   methods: {
     goToHome() {
-      this.$router.push("/CountrySelection");
+      this.$router.push("/HomePage");
     }
   },
   created() {
