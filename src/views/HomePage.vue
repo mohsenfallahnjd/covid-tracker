@@ -1,5 +1,5 @@
 <template>
-  <div class="home-page">
+  <div id="home-page" class="home-page">
     <b-container class="header-container">
       <img
         src="../assets/img/homeHeader.svg"
@@ -7,7 +7,10 @@
       />
       <div class="header-title">
         <h6>Covid-19 Tracker</h6>
-        <h3 class="country-name">
+        <h3 class="country-name null-msg" v-if="nullMsg == true">
+          Please Select Country First..!
+        </h3>
+        <h3 class="country-name" v-else>
           {{ countryData.Country }}
         </h3>
         <p @click="reloadPage()">
@@ -17,8 +20,6 @@
         </p>
       </div>
     </b-container>
-
-    <!-- <b-table class="total-table" striped :items="items"></b-table> -->
 
     <b-row class="boxs">
       <b-col class="boxs-col">
@@ -36,7 +37,7 @@
           <p class="confirmed-box--title">
             New Recovered
           </p>
-          <div class="confirmed-box--number">
+          <div class="confirmed-box--number padding-zero">
             <span class="confirmed-box--number--recovered">
               {{ countryData.NewRecovered }}
               <p>T: {{ countryData.TotalRecovered }}</p>
@@ -49,7 +50,7 @@
           <p class="confirmed-box--title">
             Deaths
           </p>
-          <div class="confirmed-box--number">
+          <div class="confirmed-box--number padding-zero">
             <span class="confirmed-box--number--NewDeaths">
               {{ countryData.NewDeaths }}
               <p>T: {{ countryData.TotalDeaths }}</p>
@@ -85,11 +86,22 @@ export default {
         Total_Deaths: "",
         Total_Recovered: ""
       }
-    ]
+    ],
+    nullMsg: true
   }),
-  beforeMount() {
+  mounted() {
     this.countryData = JSON.parse(localStorage.getItem("dataCountry"));
-    console.log(this.countryData);
+    if (!this.countryData) {
+      // alert("Please Select Country First");
+      this.nullMsg = true;
+    } else {
+      this.nullMsg = false;
+    }
+    if (JSON.parse(localStorage.getItem("flag")) === false) {
+      localStorage.setItem("flag", true);
+      console.log(localStorage.getItem("flag"));
+      location.reload();
+    }
     this.items[0].Total_Confirmed = this.countryData.TotalConfirmed;
     this.items[0].Total_Deaths = this.countryData.TotalDeaths;
     this.items[0].Total_Recovered = this.countryData.TotalRecovered;
@@ -183,7 +195,6 @@ export default {
             align-self: flex-start
             margin: 20px 16px
             text-transform: capitalize
-
 .boxs
     width: 90vw
     height: 90vw
@@ -218,7 +229,7 @@ export default {
                 order: 0
                 align-self: center
                 margin: auto 0px
-                padding-bottom: 20px
+                padding-bottom: 32px
                 &--confirmed
                     color: #FF073A
                 &--NewDeaths
@@ -235,4 +246,8 @@ export default {
                       margin: 0
                 &--deceased
                     color: #007BFF
+.null-msg
+  font-size: 20px !important
+.padding-zero
+  padding: 0px !important
 </style>

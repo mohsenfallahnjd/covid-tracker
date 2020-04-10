@@ -11,11 +11,9 @@
 <script>
 export default {
   name: "SplashScreen",
-  countryList: {},
   methods: {
     goToHome() {
-      localStorage.setItem("countryList", this.countryList);
-      this.$router.push("/HomePage");
+      this.$router.push("/CountrySelection");
     }
   },
   created() {

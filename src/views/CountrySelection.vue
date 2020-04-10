@@ -57,6 +57,9 @@ export default {
         console.log(error);
       });
   },
+  mounted() {
+    localStorage.setItem("flag", false);
+  },
   methods: {
     changeRoute(Countries) {
       localStorage.setItem("dataCountry", JSON.stringify(Countries));

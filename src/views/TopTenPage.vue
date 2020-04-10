@@ -85,8 +85,6 @@ export default {
       .then(response => {
         this.rankList = response.data.data.rows;
         this.date = response.data.data.last_update;
-
-        console.log(this.date);
       })
       .catch(error => {
         console.log(error);
@@ -198,5 +196,5 @@ export default {
 .total
   font-weight: 600 !important
 .last-update
-  font-size: 10px !important
+  font-size: 9px !important
 </style>
