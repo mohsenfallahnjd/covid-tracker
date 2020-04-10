@@ -1,0 +1,16 @@
+{
+    "name": "The Covid Tracker",
+    "short_name": "CovidTracker",
+    "theme_color": "#222b45",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "orientation": "portrait",
+    "Scope": "/",
+    "start_url": "/",
+    "icons": [{
+        "src": "/src/assets/img/logo.png",
+        "type": "image/png",
+        "sizes": "192x192"
+    }],
+    "splash_pages": "/src/assets/SplashScreen/SplashScreen.png"
+}
