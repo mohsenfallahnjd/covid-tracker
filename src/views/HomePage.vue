@@ -80,6 +80,7 @@ export default {
   name: "HomePage",
   data: () => ({
     countryData: {},
+    countryCode: null,
     items: [
       {
         Total_Confirmed: "",
@@ -89,29 +90,26 @@ export default {
     ],
     nullMsg: true
   }),
-  mounted() {
-    this.countryData = JSON.parse(localStorage.getItem("dataCountry"));
-    if (!this.countryData) {
-      // alert("Please Select Country First");
+  beforeMount() {
+    this.countryCode = localStorage.getItem("countryCode");
+    if (!this.countryCode) {
       this.nullMsg = true;
     } else {
       this.nullMsg = false;
+      if (JSON.parse(localStorage.getItem("flag")) === false) {
+        localStorage.setItem("flag", true);
+        this.reloadPage();
+      }
     }
-    if (JSON.parse(localStorage.getItem("flag")) === false) {
-      localStorage.setItem("flag", true);
-      console.log(localStorage.getItem("flag"));
-      location.reload();
-    }
+  },
+  mounted() {
+    this.countryData = JSON.parse(localStorage.getItem("dataCountry"));
     this.items[0].Total_Confirmed = this.countryData.TotalConfirmed;
     this.items[0].Total_Deaths = this.countryData.TotalDeaths;
     this.items[0].Total_Recovered = this.countryData.TotalRecovered;
   },
   methods: {
     reloadPage() {
-      this.getData();
-      location.reload();
-    },
-    getData() {
       axios
         .get("https://api.covid19api.com/summary")
         .then(response => {
@@ -119,13 +117,22 @@ export default {
             "dataCountry",
             JSON.stringify(
               response.data.Countries.filter(
-                item => item.CountryCode === this.countryData.CountryCode
+                // item => item.CountryCode === this.countryData.CountryCode
+                item => item.CountryCode === this.countryCode
               )[0]
             )
           );
+          if (response.status === 200) {
+            location.reload();
+          } else {
+            console.log(
+              response.status,
+              "response log in reloadFunction at HomePage"
+            );
+          }
         })
         .catch(error => {
-          console.log(error);
+          console.log(error, "reloadFunction in HomePage erroe");
         });
     }
   },

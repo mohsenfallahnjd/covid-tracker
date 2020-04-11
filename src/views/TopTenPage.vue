@@ -10,7 +10,11 @@
           <!-- `http://www.countryflags.io/${countries.country_abbreviation}/shiny/16.png` -->
           <img class="country-list__item--image" :src="countries.flag" />
           {{ countries.country }}
-          <span class="last-update"> Last updated {{ date }}</span>
+          <span class="last-update">
+            Last updated
+            <!-- {{ date }} -->
+            {{ lastUpdate }}
+          </span>
         </span>
         <span class="country-list__item--details">
           <b-row class="country-list__item--datail-row">
@@ -69,7 +73,7 @@
 
 <script>
 import axios from "axios";
-// import moment from "moment";
+import moment from "moment";
 
 export default {
   name: "TopTen",
@@ -90,12 +94,13 @@ export default {
         console.log(error);
       });
   },
-  // computed: {
-  //   lastUpdate() {
-  //     return moment("Apr, 10 2020, 19:28", ["DDMMMMYHHMM", "MMMMDDYHHMM"]).fromNow();
-  //     // return moment(this.date,'').fromNow();
-  //   }
-  // }
+  computed: {
+    lastUpdate() {
+      return moment(
+        moment(this.date, ["DDMMMMY HH:mm", "MMMMDDY HH:mm"]).utc(true)
+      ).fromNow();
+    }
+  }
 };
 </script>
 
@@ -197,4 +202,5 @@ export default {
   font-weight: 600 !important
 .last-update
   font-size: 9px !important
+  margin-left: 4em
 </style>

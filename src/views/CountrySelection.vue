@@ -18,23 +18,21 @@
       </div>
     </b-container>
     <b-list-group class="country-list">
-      <b-list-group-item
-        v-for="(Countries, item) in filteredList"
-        :key="item"
-        class="country-list__item"
-        @click="changeRoute(Countries)"
-      >
-        <router-link :to="{ name: 'HomePage' }">
+      <router-link :to="{ name: 'HomePage' }">
+        <b-list-group-item
+          v-for="(Countries, item) in filteredList"
+          :key="item"
+          class="country-list__item"
+          @click="changeRoute(Countries.ISO2)"
+        >
           <span class="country-list__item--country">
             <img
-              :src="
-                `http://www.countryflags.io/${Countries.CountryCode}/shiny/16.png`
-              "
+              :src="`http://www.countryflags.io/${Countries.ISO2}/shiny/16.png`"
             />
             {{ Countries.Country }}
           </span>
-        </router-link>
-      </b-list-group-item>
+        </b-list-group-item>
+      </router-link>
     </b-list-group>
   </div>
 </template>
@@ -48,21 +46,35 @@ export default {
     search: ""
   }),
   beforeMount() {
+    // axios
+    //   .get("https://api.covid19api.com/summary")
+    //   .then(response => {
+    //     this.countryList = response.data.Countries;
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
     axios
-      .get("https://api.covid19api.com/summary")
+      .get("https://api.covid19api.com/countries")
       .then(response => {
-        this.countryList = response.data.Countries;
+        this.countryList = response.data.sort(function(a, b) {
+          const countryA = a.Country.toLowerCase();
+          const countryB = b.Country.toLowerCase();
+          if (countryA < countryB) return -1;
+          if (countryA > countryB) return 1;
+          return 0;
+        });
       })
       .catch(error => {
-        console.log(error);
+        console.log(error, "CountryList Get erorr");
       });
   },
   mounted() {
     localStorage.setItem("flag", false);
   },
   methods: {
-    changeRoute(Countries) {
-      localStorage.setItem("dataCountry", JSON.stringify(Countries));
+    changeRoute(ISO2) {
+      localStorage.setItem("countryCode", ISO2);
     },
     goBack() {
       this.$router.go(-1);
