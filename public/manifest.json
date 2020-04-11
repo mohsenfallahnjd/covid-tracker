@@ -7,10 +7,6 @@
     "orientation": "portrait",
     "Scope": "/",
     "start_url": "/",
-    "icons": [{
-        "src": "/src/assets/img/logo.png",
-        "type": "image/png",
-        "sizes": "192x192"
-    }],
-    "splash_pages": "/src/assets/SplashScreen/SplashScreen.png"
+    "icons": null,
+    "splash_pages": null
 }
