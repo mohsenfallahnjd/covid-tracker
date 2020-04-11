@@ -18,7 +18,12 @@
       </div>
     </b-container>
     <b-list-group class="country-list">
-      <router-link :to="{ name: 'HomePage' }">
+      <b-list-group-item v-if="badRespones === true" class="country-list__item red-color">
+        <span class="country-list__item--country red-color">
+          Please Refresh This Page..!
+        </span>
+      </b-list-group-item>
+      <router-link v-else :to="{ name: 'HomePage' }">
         <b-list-group-item
           v-for="(Countries, item) in filteredList"
           :key="item"
@@ -43,7 +48,8 @@ export default {
   name: "CountrySelection",
   data: () => ({
     countryList: [],
-    search: ""
+    search: "",
+    badRespones: false
   }),
   beforeMount() {
     // axios
@@ -64,9 +70,13 @@ export default {
           if (countryA > countryB) return 1;
           return 0;
         });
+        if (response.status !== 200) {
+          this.badRespones = true;
+        }
       })
       .catch(error => {
         console.log(error, "CountryList Get erorr");
+        this.badRespones = true;
       });
   },
   mounted() {
@@ -164,4 +174,7 @@ export default {
     .header-container
         height: 185px
         background-color: #FFFFFF
+.red-color
+  color: #FF073A !important
+  justify-content: center
 </style>

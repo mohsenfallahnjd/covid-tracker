@@ -1,32 +1,6 @@
 <template>
   <div id="app">
     <router-view />
-    <b-card class="navbar-icon" no-body>
-      <b-nav card-header tabs>
-        <b-nav-item to="/CountrySelection">
-          <img src="./assets/img/country.svg" alt="select-country" />
-          <span class="caption">
-            countries
-          </span>
-        </b-nav-item>
-        <b-nav-item to="/HomePage">
-          <img src="./assets/img/logo.svg" alt="select-country" />
-          <span class="caption">
-            Home
-          </span>
-        </b-nav-item>
-        <b-nav-item to="/TopTenPage">
-          <img src="./assets/img/topTen.svg" alt="select-country" />
-          <span class="caption">
-            Top10
-          </span>
-        </b-nav-item>
-      </b-nav>
-
-      <!-- <b-card-body>
-        <router-view></router-view>
-      </b-card-body> -->
-    </b-card>
   </div>
 </template>
 
@@ -60,4 +34,8 @@ export default {
       font-size: 15px
       line-height: 18px
       color: #6C757D
+  .active-line
+    border-top: 2px solid #EB5569
+  .active-color
+    color: #EB5569 !important
 </style>

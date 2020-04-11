@@ -6,15 +6,23 @@
         class="header-container--background"
       />
       <div class="header-title">
-        <h6>Covid-19 Tracker</h6>
-        <h3 class="country-name null-msg" v-if="nullMsg == true">
-          Please Select Country First..!
+        <h6>
+          Covid-19 Tracker
+        </h6>
+        <h3 class="country-name null-msg red-color" v-if="nullMsg == true">
+          Please Select Country . . !
+          <router-link to="/CountrySelection">
+            <b-icon-caret-down-fill class="select-country red-color" />
+          </router-link>
         </h3>
         <h3 class="country-name" v-else>
           {{ countryData.Country }}
+          <router-link to="/CountrySelection">
+            <b-icon-caret-down-fill class="select-country" />
+          </router-link>
         </h3>
         <p @click="reloadPage()">
-          <b-icon-arrow-repeat></b-icon-arrow-repeat>
+          <b-icon-arrow-repeat />
           Last updated
           {{ lastUpdate }}
         </p>
@@ -25,40 +33,6 @@
       <b-col class="boxs-col">
         <div class="confirmed-box">
           <p class="confirmed-box--title">
-            New Confirmed
-          </p>
-          <div class="confirmed-box--number">
-            <span class="confirmed-box--number--confirmed">
-              {{ countryData.NewConfirmed }}
-            </span>
-          </div>
-        </div>
-        <div class="confirmed-box">
-          <p class="confirmed-box--title">
-            New Recovered
-          </p>
-          <div class="confirmed-box--number padding-zero">
-            <span class="confirmed-box--number--recovered">
-              {{ countryData.NewRecovered }}
-              <p>T: {{ countryData.TotalRecovered }}</p>
-            </span>
-          </div>
-        </div>
-      </b-col>
-      <b-col class="boxs-col">
-        <div class="confirmed-box">
-          <p class="confirmed-box--title">
-            Deaths
-          </p>
-          <div class="confirmed-box--number padding-zero">
-            <span class="confirmed-box--number--NewDeaths">
-              {{ countryData.NewDeaths }}
-              <p>T: {{ countryData.TotalDeaths }}</p>
-            </span>
-          </div>
-        </div>
-        <div class="confirmed-box">
-          <p class="confirmed-box--title">
             Total
           </p>
           <div class="confirmed-box--number">
@@ -67,8 +41,84 @@
             </span>
           </div>
         </div>
+        <div class="confirmed-box">
+          <p class="confirmed-box--title">
+            Recovered
+          </p>
+          <div class="confirmed-box--number padding-zero">
+            <span class="confirmed-box--number--recovered">
+              <span>
+                <b-icon-arrow-up class="arrow" />
+                {{ countryData.NewRecovered }}
+              </span>
+              <p>{{ countryData.TotalRecovered }}</p>
+            </span>
+          </div>
+        </div>
+      </b-col>
+      <b-col class="boxs-col">
+        <div class="confirmed-box">
+          <p class="confirmed-box--title">
+            Confirmed
+          </p>
+          <div class="confirmed-box--number">
+            <span class="confirmed-box--number--confirmed">
+              <span>
+                <b-icon-arrow-up class="arrow" />
+                {{ countryData.NewConfirmed }}
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="confirmed-box">
+          <p class="confirmed-box--title">
+            Deaths
+          </p>
+          <div class="confirmed-box--number padding-zero">
+            <span class="confirmed-box--number--NewDeaths">
+              <span>
+                <b-icon-arrow-up class="arrow" />
+                {{ countryData.NewDeaths }}
+              </span>
+              <p>{{ countryData.TotalDeaths }}</p>
+            </span>
+          </div>
+        </div>
       </b-col>
     </b-row>
+
+    <!-- <b-container>
+      State of Country
+    </b-container> -->
+
+    <!-- IconBar -->
+    <b-card class="navbar-icon" no-body>
+      <b-nav card-header tabs>
+        <!-- <b-nav-item to="/CountrySelection">
+          <img src="../assets/img/country.svg" alt="select-country" />
+          <span class="caption">
+            countries
+          </span>
+        </b-nav-item> -->
+        <b-nav-item class="active-line" to="/HomePage">
+          <img src="../assets/img/homePageActive.svg" alt="home-page" />
+          <span class="caption active-color">
+            Home
+          </span>
+        </b-nav-item>
+        <b-nav-item to="/TopTenPage">
+          <img src="../assets/img/topTen.svg" alt="top-ten" />
+          <span class="caption">
+            Top10
+          </span>
+        </b-nav-item>
+      </b-nav>
+      <b-card-body>
+        <router-view />
+      </b-card-body>
+    </b-card>
+    <!--  -->
   </div>
 </template>
 
@@ -166,7 +216,7 @@ export default {
         flex-direction: column
         align-self: center
         justify-self: center
-        margin-left: 10vw
+        margin-left: 8vw
         h6
             position: static
             font-style: normal
@@ -194,14 +244,21 @@ export default {
             width: auto
             font-style: normal
             font-weight: bold
-            font-size: 40px
-            line-height: 36px
+            font-size: 30px
+            line-height: 30px
             color: #FFFFFF
             flex: none
             order: 0
             align-self: flex-start
-            margin: 20px 16px
+            padding: 16px
             text-transform: capitalize
+            margin: 0
+    .select-country
+      padding-bottom: 0.09em
+      color: #C0CCDA
+      font-style: normal
+      font-weight: normal
+      font-size: 20px
 .boxs
     width: 90vw
     height: 90vw
@@ -229,8 +286,8 @@ export default {
             &--number
                 font-style: normal
                 font-weight: bold
-                // font-weight: 500
-                font-size: 32px
+                // font-weight: 800
+                font-size: 25px
                 line-height: 36px
                 flex: none
                 order: 0
@@ -243,18 +300,23 @@ export default {
                     color: #6C757D
                     p
                       font-weight: 100
-                      font-size: 10px
+                      font-size: 12px
                       margin: 0
                 &--recovered
                     color: #28A745
                     p
                       font-weight: 100
-                      font-size: 10px
+                      font-size: 12px
                       margin: 0
                 &--deceased
                     color: #007BFF
 .null-msg
   font-size: 20px !important
+  margin-right: 1vw !important
+.red-color
+  color: #FF073A !important
 .padding-zero
   padding: 0px !important
+.arrow
+  font-size: 20px
 </style>

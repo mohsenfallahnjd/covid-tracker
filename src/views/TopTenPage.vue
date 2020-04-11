@@ -1,5 +1,5 @@
 <template>
-  <span class="top-ten-page">
+  <div class="top-ten-page">
     <b-list-group class="country-list">
       <b-list-group-item
         v-for="(countries, item) in rankList"
@@ -10,11 +10,7 @@
           <!-- `http://www.countryflags.io/${countries.country_abbreviation}/shiny/16.png` -->
           <img class="country-list__item--image" :src="countries.flag" />
           {{ countries.country }}
-          <span class="last-update">
-            Last updated
-            <!-- {{ date }} -->
-            {{ lastUpdate }}
-          </span>
+          <span class="last-update"> Last updated {{ lastUpdate }} </span>
         </span>
         <span class="country-list__item--details">
           <b-row class="country-list__item--datail-row">
@@ -25,8 +21,9 @@
               </div>
             </span>
             <span>
-              <div class="detail-title">new</div>
+              <div class="detail-title">confirmed</div>
               <div class="detail-number confirmed">
+                <b-icon-arrow-up />
                 {{ countries.new_cases }}
               </div>
             </span>
@@ -45,8 +42,9 @@
               </div>
             </span>
             <span>
-              <div class="detail-title">new deaths</div>
+              <div class="detail-title">deaths</div>
               <div class="detail-number deaths">
+                <b-icon-arrow-up />
                 {{ countries.new_deaths }}
               </div>
             </span>
@@ -68,7 +66,35 @@
         </span>
       </b-list-group-item>
     </b-list-group>
-  </span>
+
+    <!-- IconBar -->
+    <b-card class="navbar-icon" no-body>
+      <b-nav card-header tabs>
+        <!-- <b-nav-item to="/CountrySelection">
+          <img src="../assets/img/country.svg" alt="select-country" />
+          <span class="caption">
+            countries
+          </span>
+        </b-nav-item> -->
+        <b-nav-item to="/HomePage">
+          <img src="../assets/img/logo.svg" alt="home-page" />
+          <span class="caption">
+            Home
+          </span>
+        </b-nav-item>
+        <b-nav-item class="active-line" to="/TopTenPage">
+          <img src="../assets/img/topTenActive.svg" alt="top-ten" />
+          <span class="caption active-color">
+            Top10
+          </span>
+        </b-nav-item>
+      </b-nav>
+      <b-card-body>
+        <router-view></router-view>
+      </b-card-body>
+    </b-card>
+    <!--  -->
+  </div>
 </template>
 
 <script>
@@ -113,8 +139,8 @@ export default {
   background: #FFFFFF
   .country-list
     margin-top: 3vh
-    margin-bottom: 6vh
-    overflow-y: scroll
+    margin-bottom: 7vh
+    // overflow-y: scroll
     display: flex
     align-items: center
     &__item
@@ -122,7 +148,7 @@ export default {
       flex-direction: column
       padding: 20px
       width: 93vw
-      height: 210px
+      height: 220px
       background: #FFFFFF
       box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.05)
       border: none
@@ -186,9 +212,9 @@ export default {
           position: static
           font-style: normal
           font-weight: 500
-          font-size: 16px
+          font-size: 15px
           line-height: 18px
-          margin: 8px 4px
+          margin: 10px 4px
 
 .confirmed
   color: #FF073A
@@ -202,5 +228,5 @@ export default {
   font-weight: 600 !important
 .last-update
   font-size: 9px !important
-  margin-left: 4em
+  margin-left: 3em
 </style>
