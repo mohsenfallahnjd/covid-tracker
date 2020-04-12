@@ -1,5 +1,5 @@
 {
-    "name": "The Covid Tracker",
+    "name": "Coronavirus Tracker",
     "short_name": "CovidTracker",
     "theme_color": "#222b45",
     "background_color": "#ffffff",
@@ -7,6 +7,6 @@
     "orientation": "portrait",
     "Scope": "/",
     "start_url": "/",
-    "icons": null,
+    "icons": [],
     "splash_pages": null
 }

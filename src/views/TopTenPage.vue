@@ -10,6 +10,9 @@
           <!-- `http://www.countryflags.io/${countries.country_abbreviation}/shiny/16.png` -->
           <img class="country-list__item--image" :src="countries.flag" />
           {{ countries.country }}
+          <router-link to="/WorldStatistics">
+            <b-icon-clipboard-data v-if="countries.country === 'World'" />
+          </router-link>
           <span class="last-update"> Last updated {{ lastUpdate }} </span>
         </span>
         <span class="country-list__item--details">
@@ -148,7 +151,7 @@ export default {
       flex-direction: column
       padding: 20px
       width: 93vw
-      height: 220px
+      height: auto //220px
       background: #FFFFFF
       box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.05)
       border: none
