@@ -12,7 +12,7 @@
         <h3 class="country-name null-msg red-color" v-if="nullMsg == true">
           Please Select Country . . !
           <router-link to="/CountrySelection">
-            <b-icon-caret-down-fill class="select-country red-color" />
+            <b-icon-caret-down-fill class="select-country" />
           </router-link>
         </h3>
         <h3 class="country-name" v-else>
@@ -182,7 +182,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error, "reloadFunction in HomePage erroe");
+          console.log(error, "reloadFunction in HomePage error");
         });
     }
   },

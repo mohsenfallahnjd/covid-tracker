@@ -3,7 +3,10 @@
     <b-list-group class="country-list">
       <b-list-group-item class="country-list__item">
         <span class="country-list__item--title">
-          <b-icon-caret-left-fill class="back-btn" @click="goBack()"></b-icon-caret-left-fill>
+          <b-icon-caret-left-fill
+            class="back-btn"
+            @click="goBack()"
+          ></b-icon-caret-left-fill>
           <img
             class="country-list__item--image"
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/International_Flag_of_Planet_Earth.svg/800px-International_Flag_of_Planet_Earth.svg.png"
@@ -167,7 +170,7 @@ export default {
       width: 93vw
       height: auto
       background: #FFFFFF
-      //box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.05)
+      box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.05)
       border: none
       margin-bottom: 2vh
       &--title
