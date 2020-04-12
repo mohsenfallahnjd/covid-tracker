@@ -31,7 +31,7 @@ export default {
     .caption
       font-style: normal
       font-weight: 500
-      font-size: 15px
+      font-size: 13px
       line-height: 18px
       color: #6C757D
   .active-line

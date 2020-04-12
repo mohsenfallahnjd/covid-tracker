@@ -5,15 +5,20 @@
         v-for="(countries, item) in rankList"
         :key="item"
         class="country-list__item"
+        lazy
       >
         <span class="country-list__item--title">
-          <!-- `http://www.countryflags.io/${countries.country_abbreviation}/shiny/16.png` -->
+          <span v-if="countries.country !== 'World'" class="rank-num"
+            >{{ item }}.</span
+          >
           <img class="country-list__item--image" :src="countries.flag" />
           {{ countries.country }}
           <router-link to="/WorldStatistics">
             <b-icon-clipboard-data v-if="countries.country === 'World'" />
           </router-link>
-          <span class="last-update"> Last updated {{ lastUpdate }} </span>
+          <span v-if="countries.country === 'World'" class="last-update">
+            Last updated {{ lastUpdate }}
+          </span>
         </span>
         <span class="country-list__item--details">
           <b-row class="country-list__item--datail-row">
@@ -73,24 +78,26 @@
     <!-- IconBar -->
     <b-card class="navbar-icon" no-body>
       <b-nav card-header tabs>
-        <b-nav-item to="/AllCountry">
-          <img src="../assets/img/country.svg" alt="all-country" />
-          <span class="caption">
-            A.countries
-          </span>
-        </b-nav-item>
         <b-nav-item to="/HomePage">
           <img src="../assets/img/logo.svg" alt="home-page" />
           <span class="caption">
             Home
           </span>
         </b-nav-item>
-        <b-nav-item class="active-line" to="/TopTenPage">
-          <img src="../assets/img/topTenActive.svg" alt="top-ten" />
+
+        <b-nav-item class="active-line" to="/AllCountry">
+          <img src="../assets/img/countryActive.svg" alt="all-country" />
           <span class="caption active-color">
-            Top10
+            Countries Ranking
           </span>
         </b-nav-item>
+
+        <!-- <b-nav-item to="/TopTenPage">
+          <img src="../assets/img/topTen.svg" alt="top-ten" />
+          <span class="caption">
+            Top10
+          </span>
+        </b-nav-item> -->
       </b-nav>
       <b-card-body>
         <router-view></router-view>
@@ -113,7 +120,7 @@ export default {
   beforeMount() {
     axios
       .get(
-        "https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?limit=11"
+        "https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?limit=250"
       )
       .then(response => {
         this.rankList = response.data.data.rows;
@@ -232,4 +239,7 @@ export default {
 .last-update
   font-size: 9px !important
   margin-left: 3em
+.rank-num
+    font-size: 10px
+    margin-right: 3px
 </style>

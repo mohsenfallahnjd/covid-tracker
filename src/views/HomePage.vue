@@ -5,18 +5,25 @@
         src="../assets/img/homeHeader.svg"
         class="header-container--background"
       />
+
+      <!-- title -->
       <div class="header-title">
         <h6>
           Covid-19 Tracker
         </h6>
+
+        <!-- null-Massage -->
         <h3 class="country-name null-msg red-color" v-if="nullMsg == true">
           Please Select Country . . !
           <router-link to="/CountrySelection">
             <b-icon-caret-down-fill class="select-country" />
           </router-link>
         </h3>
+        <!--  -->
+
         <h3 class="country-name" v-else>
-          {{ countryData.Country }}
+          <img class="country-name--image" :src="countryData.flag" />
+          {{ countryData.country }}
           <router-link to="/CountrySelection">
             <b-icon-caret-down-fill class="select-country" />
           </router-link>
@@ -27,35 +34,11 @@
           {{ lastUpdate }}
         </p>
       </div>
+      <!--  -->
     </b-container>
 
+    <!-- Confirmed -->
     <b-row class="boxs">
-      <b-col class="boxs-col">
-        <div class="confirmed-box">
-          <p class="confirmed-box--title">
-            Total
-          </p>
-          <div class="confirmed-box--number">
-            <span class="confirmed-box--number--deceased">
-              {{ countryData.TotalConfirmed }}
-            </span>
-          </div>
-        </div>
-        <div class="confirmed-box">
-          <p class="confirmed-box--title">
-            Recovered
-          </p>
-          <div class="confirmed-box--number padding-zero">
-            <span class="confirmed-box--number--recovered">
-              <span>
-                <b-icon-arrow-up class="arrow" />
-                {{ countryData.NewRecovered }}
-              </span>
-              <p>{{ countryData.TotalRecovered }}</p>
-            </span>
-          </div>
-        </div>
-      </b-col>
       <b-col class="boxs-col">
         <div class="confirmed-box">
           <p class="confirmed-box--title">
@@ -65,12 +48,49 @@
             <span class="confirmed-box--number--confirmed">
               <span>
                 <b-icon-arrow-up class="arrow" />
-                {{ countryData.NewConfirmed }}
+                {{ countryData.new_cases }}
               </span>
+              <p>{{ countryData.total_cases }}</p>
             </span>
           </div>
         </div>
+        <!--  -->
 
+        <!-- Recovered -->
+        <div class="confirmed-box">
+          <p class="confirmed-box--title">
+            Recovered
+          </p>
+          <div class="confirmed-box--number padding-zero">
+            <span class="confirmed-box--number--recovered">
+              {{ countryData.total_recovered }}
+              <p>
+                <b-icon-shield-shaded />
+              </p>
+            </span>
+          </div>
+        </div>
+        <!--  -->
+      </b-col>
+      <b-col class="boxs-col">
+        <!-- active -->
+        <div class="confirmed-box">
+          <p class="confirmed-box--title">
+            active
+          </p>
+          <div class="confirmed-box--number">
+            <span class="confirmed-box--number--deceased">
+              {{ countryData.active_cases }}
+              <p>
+                <b-icon-x-octagon-fill />
+                : {{ countryData.serious_critical }}
+              </p>
+            </span>
+          </div>
+        </div>
+        <!--  -->
+
+        <!-- Deaths -->
         <div class="confirmed-box">
           <p class="confirmed-box--title">
             Deaths
@@ -79,40 +99,39 @@
             <span class="confirmed-box--number--NewDeaths">
               <span>
                 <b-icon-arrow-up class="arrow" />
-                {{ countryData.NewDeaths }}
+                {{ countryData.new_deaths }}
               </span>
-              <p>{{ countryData.TotalDeaths }}</p>
+              <p>{{ countryData.total_deaths }}</p>
             </span>
           </div>
         </div>
+        <!--  -->
       </b-col>
     </b-row>
-
-    <!-- <b-container>
-      State of Country
-    </b-container> -->
 
     <!-- IconBar -->
     <b-card class="navbar-icon" no-body>
       <b-nav card-header tabs>
-        <!-- <b-nav-item to="/CountrySelection">
-          <img src="../assets/img/country.svg" alt="select-country" />
-          <span class="caption">
-            countries
-          </span>
-        </b-nav-item> -->
         <b-nav-item class="active-line" to="/HomePage">
           <img src="../assets/img/homePageActive.svg" alt="home-page" />
           <span class="caption active-color">
             Home
           </span>
         </b-nav-item>
-        <b-nav-item to="/TopTenPage">
+
+        <b-nav-item to="/AllCountry">
+          <img src="../assets/img/country.svg" alt="all-country" />
+          <span class="caption">
+            Countries Ranking
+          </span>
+        </b-nav-item>
+
+        <!-- <b-nav-item to="/TopTenPage">
           <img src="../assets/img/topTen.svg" alt="top-ten" />
           <span class="caption">
             Top10
           </span>
-        </b-nav-item>
+        </b-nav-item> -->
       </b-nav>
       <b-card-body>
         <router-view />
@@ -130,19 +149,14 @@ export default {
   name: "HomePage",
   data: () => ({
     countryData: {},
-    countryCode: null,
-    items: [
-      {
-        Total_Confirmed: "",
-        Total_Deaths: "",
-        Total_Recovered: ""
-      }
-    ],
+    countrySelected: null,
+    date: {},
     nullMsg: true
   }),
   beforeMount() {
-    this.countryCode = localStorage.getItem("countryCode");
-    if (!this.countryCode) {
+    this.countrySelected = localStorage.getItem("countrySelected");
+    this.date = localStorage.getItem("lastUpdate");
+    if (!this.countrySelected) {
       this.nullMsg = true;
     } else {
       this.nullMsg = false;
@@ -154,24 +168,23 @@ export default {
   },
   mounted() {
     this.countryData = JSON.parse(localStorage.getItem("dataCountry"));
-    this.items[0].Total_Confirmed = this.countryData.TotalConfirmed;
-    this.items[0].Total_Deaths = this.countryData.TotalDeaths;
-    this.items[0].Total_Recovered = this.countryData.TotalRecovered;
   },
   methods: {
     reloadPage() {
       axios
-        .get("https://api.covid19api.com/summary")
+        .get(
+          `https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?search=${this.countrySelected}`
+        )
         .then(response => {
           localStorage.setItem(
             "dataCountry",
-            JSON.stringify(
-              response.data.Countries.filter(
-                // item => item.CountryCode === this.countryData.CountryCode
-                item => item.CountryCode === this.countryCode
-              )[0]
-            )
+            JSON.stringify(response.data.data.rows[0])
           );
+          localStorage.setItem(
+            "lastUpdate",
+            JSON.stringify(response.data.data.last_update)
+          );
+
           if (response.status === 200) {
             location.reload();
           } else {
@@ -188,7 +201,9 @@ export default {
   },
   computed: {
     lastUpdate() {
-      return moment(this.countryData.Date).fromNow();
+      return moment(
+        moment(this.date, ["DDMMMMY HH:mm", "MMMMDDY HH:mm"]).utc(true)
+      ).fromNow();
     }
   }
 };
@@ -253,6 +268,11 @@ export default {
             padding: 16px
             text-transform: capitalize
             margin: 0
+            &--image
+              width: 8vw
+              object-fit: cover
+              margin-right: 3px
+              margin-bottom: 0.8vh
     .select-country
       padding-bottom: 0.09em
       color: #C0CCDA
@@ -293,9 +313,13 @@ export default {
                 order: 0
                 align-self: center
                 margin: auto 0px
-                padding-bottom: 32px
+                // padding-bottom: 32px
                 &--confirmed
                     color: #FF073A
+                    p
+                      font-weight: 100
+                      font-size: 12px
+                      margin: 0
                 &--NewDeaths
                     color: #6C757D
                     p
@@ -309,7 +333,11 @@ export default {
                       font-size: 12px
                       margin: 0
                 &--deceased
-                    color: #007BFF
+                    color: #FF073A //#007BFF
+                    p
+                      font-weight: 100
+                      font-size: 12px
+                      margin: 0
 .null-msg
   font-size: 20px !important
   margin-right: 1vw !important

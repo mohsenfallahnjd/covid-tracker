@@ -58,7 +58,7 @@
             <b-col class="padding-zero">
               <span>
                 <div class="detail-title">A.C.mild condition</div>
-                <div class="detail-number deaths">
+                <div class="detail-number mild-case">
                   {{ worldData.mild_condition_active_cases }} /
                   {{ worldData.active_cases_mild_percentage }}%
                 </div>
@@ -247,6 +247,8 @@ export default {
   color: #007BFF
 .out-come
     color: #FFB100
+.mild-case
+  color: #1EE34B
 .total
   font-weight: 600 !important
 .last-update

@@ -3,6 +3,7 @@ import HomePage from "../views/HomePage.vue";
 import SplashScreen from "../views/SplashScreen.vue";
 import TopTenPage from "../views/TopTenPage.vue";
 import WorldStatistics from "../views/WorldStatistics.vue";
+import AllCountry from "../views/AllCountry.vue";
 
 const routes = [{
         path: "/",
@@ -33,6 +34,11 @@ const routes = [{
         path: "/WorldStatistics",
         name: "WorldStatistics",
         component: WorldStatistics
+    },
+    {
+        path: "/AllCountry",
+        name: "AllCountry",
+        component: AllCountry
     }
 ];
 

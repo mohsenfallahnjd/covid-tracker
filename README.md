@@ -22,3 +22,4 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+API: https://explore.postman.com/templates/6453/covid19-api

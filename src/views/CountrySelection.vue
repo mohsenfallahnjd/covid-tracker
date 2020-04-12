@@ -1,5 +1,6 @@
 <template>
   <div class="country-selection">
+    <!-- header -->
     <b-container class="header-container">
       <div class="country-selection__header">
         <div class="country-selection__header--back-icon">
@@ -17,28 +18,39 @@
         ></b-form-input>
       </div>
     </b-container>
+    <!--  -->
+
+    <!-- list -->
     <b-list-group class="country-list">
-      <b-list-group-item v-if="badRespones === true" class="country-list__item red-color">
-        <span class="country-list__item--country red-color">
+      <!-- badResponse Message -->
+      <b-list-group-item
+        v-if="badResponse === true"
+        class="country-list__item bad-response"
+      >
+        <span class="country-list__item--country bad-response">
           Please Refresh This Page..!
         </span>
       </b-list-group-item>
+      <!--  -->
+
       <router-link v-else :to="{ name: 'HomePage' }">
         <b-list-group-item
-          v-for="(Countries, item) in filteredList"
+          v-for="(countries, item) in filteredList"
           :key="item"
           class="country-list__item"
-          @click="changeRoute(Countries.ISO2)"
+          @click="changeRoute(countries.country)"
         >
           <span class="country-list__item--country">
-            <img
-              :src="`http://www.countryflags.io/${Countries.ISO2}/shiny/16.png`"
-            />
-            {{ Countries.Country }}
+            <!-- <img
+              :src="`http://www.countryflags.io/${countries.flag}/shiny/16.png`"
+            /> -->
+            <img :src="countries.flag" />
+            {{ countries.country }}
           </span>
         </b-list-group-item>
       </router-link>
     </b-list-group>
+    <!--  -->
   </div>
 </template>
 
@@ -49,42 +61,35 @@ export default {
   data: () => ({
     countryList: [],
     search: "",
-    badRespones: false
+    badResponse: false
   }),
   beforeMount() {
-    // axios
-    //   .get("https://api.covid19api.com/summary")
-    //   .then(response => {
-    //     this.countryList = response.data.Countries;
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
     axios
-      .get("https://api.covid19api.com/countries")
+      .get(
+        "https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?limit=250"
+      )
       .then(response => {
-        this.countryList = response.data.sort(function(a, b) {
-          const countryA = a.Country.toLowerCase();
-          const countryB = b.Country.toLowerCase();
+        this.countryList = response.data.data.rows.sort(function(a, b) {
+          const countryA = a.country.toLowerCase();
+          const countryB = b.country.toLowerCase();
           if (countryA < countryB) return -1;
           if (countryA > countryB) return 1;
           return 0;
         });
         if (response.status !== 200) {
-          this.badRespones = true;
+          this.badResponse = true;
         }
       })
       .catch(error => {
         console.log(error, "CountryList Get erorr");
-        this.badRespones = true;
+        this.badResponse = true;
       });
-  },
-  mounted() {
+      
     localStorage.setItem("flag", false);
   },
   methods: {
-    changeRoute(ISO2) {
-      localStorage.setItem("countryCode", ISO2);
+    changeRoute(country) {
+      localStorage.setItem("countrySelected", country);
     },
     goBack() {
       this.$router.go(-1);
@@ -93,9 +98,9 @@ export default {
   computed: {
     filteredList() {
       return this.countryList.filter(Country => {
-        return Country.Country.toLowerCase().startsWith(
-          this.search.toLowerCase()
-        );
+        return Country.country
+          .toLowerCase()
+          .startsWith(this.search.toLowerCase());
       });
     }
   }
@@ -170,11 +175,14 @@ export default {
                 align-self: center
                 margin: 2px 0px
                 img
-                    padding: 0px 8px
+                  width: 6vw
+                  object-fit: cover
+                  margin-right: 10px
+                  margin-bottom: 0.8vh
     .header-container
         height: 185px
         background-color: #FFFFFF
-.red-color
+.bad-response
   color: #FF073A !important
   justify-content: center
 </style>
