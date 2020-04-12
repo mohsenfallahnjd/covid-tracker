@@ -81,9 +81,9 @@
           <div class="confirmed-box--number">
             <span class="confirmed-box--number--deceased">
               {{ countryData.active_cases }}
-              <p>
-                <b-icon-x-octagon-fill />
-                : {{ countryData.serious_critical }}
+              <p class="critical-case">
+                <b-icon-exclamation-circle style="font-size:15px" />
+                {{ countryData.serious_critical }}
               </p>
             </span>
           </div>
@@ -333,7 +333,7 @@ export default {
                       font-size: 12px
                       margin: 0
                 &--deceased
-                    color: #FF073A //#007BFF
+                    color: #007BFF
                     p
                       font-weight: 100
                       font-size: 12px
@@ -347,4 +347,6 @@ export default {
   padding: 0px !important
 .arrow
   font-size: 20px
+.critical-case
+  color: #FFB100
 </style>
