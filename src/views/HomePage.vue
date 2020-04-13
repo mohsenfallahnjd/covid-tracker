@@ -1,165 +1,212 @@
 <template>
   <div id="home-page" class="home-page">
+    <b-overlay :show="show" rounded="sm" @shown="onShown" @hidden="onHidden">
+      <b-container class="header-container" :aria-hidden="show ? 'true' : null">
+        <img
+          src="../assets/img/homeHeader.svg"
+          class="header-container--background"
+        />
 
-      <b-overlay :show="show" rounded="sm" @shown="onShown" @hidden="onHidden">
-        <b-container
-          class="header-container"
-          :aria-hidden="show ? 'true' : null"
-        >
+        <!-- title -->
+        <div class="header-title">
+          <h6>
+            Covid-19 Tracker
+          </h6>
+
+          <!-- null-Massage -->
+          <h3 class="country-name null-msg red-color" v-if="nullMsg == true">
+            Please Select Country . . !
+            <router-link to="/CountrySelection">
+              <b-icon-caret-down-fill class="select-country" />
+            </router-link>
+          </h3>
+          <!--  -->
+
+          <h3 class="country-name" v-else>
           <img
-            src="../assets/img/homeHeader.svg"
-            class="header-container--background"
+            class="country-name--image"
+            :src="countryData.countryInfo.flag"
           />
+          
+            {{ countryData.country }}
+            <router-link to="/CountrySelection">
+              <b-icon-caret-down-fill class="select-country" />
+            </router-link>
+          </h3>
+          <p
+            ref="show"
+            :disabled="show"
+            variant="primary"
+            @click="reloadPage()"
+          >
+            <b-icon-arrow-repeat />
+            Last updated
+            {{ lastUpdate }}
+          </p>
+        </div>
+        <!--  -->
+      </b-container>
 
-          <!-- title -->
-          <div class="header-title">
-            <h6>
-              Covid-19 Tracker
-            </h6>
-
-            <!-- null-Massage -->
-            <h3 class="country-name null-msg red-color" v-if="nullMsg == true">
-              Please Select Country . . !
-              <router-link to="/CountrySelection">
-                <b-icon-caret-down-fill class="select-country" />
-              </router-link>
-            </h3>
-            <!--  -->
-
-            <h3 class="country-name" v-else>
-              <img class="country-name--image" :src="countryData.flag" />
-              {{ countryData.country }}
-              <router-link to="/CountrySelection">
-                <b-icon-caret-down-fill class="select-country" />
-              </router-link>
-            </h3>
-            <p
-              ref="show"
-              :disabled="show"
-              variant="primary"
-              @click="reloadPage()"
-            >
-              <b-icon-arrow-repeat />
-              Last updated
-              {{ lastUpdate }}
+      <!-- Confirmed -->
+      <b-row class="boxs">
+        <b-col class="boxs-col">
+          <div class="confirmed-box">
+            <p class="confirmed-box--title">
+              Confirmed
             </p>
+            <div class="confirmed-box--number">
+              <span class="confirmed-box--number--confirmed">
+                <span>
+                  <b-icon-arrow-up class="arrow" />
+                  {{ countryData.todayCases }}
+                </span>
+                <p>{{ countryData.cases }}</p>
+              </span>
+            </div>
           </div>
           <!--  -->
-        </b-container>
 
-
-
-
-    <!-- Confirmed -->
-    <b-row class="boxs">
-      <b-col class="boxs-col">
-        <div class="confirmed-box">
-          <p class="confirmed-box--title">
-            Confirmed
-          </p>
-          <div class="confirmed-box--number">
-            <span class="confirmed-box--number--confirmed">
-              <span>
-                <b-icon-arrow-up class="arrow" />
-                {{ countryData.new_cases }}
+          <!-- Recovered -->
+          <div class="confirmed-box">
+            <p class="confirmed-box--title">
+              Recovered
+            </p>
+            <div class="confirmed-box--number padding-zero">
+              <span class="confirmed-box--number--recovered">
+                {{ countryData.recovered }}
+                <p>
+                  <b-icon-shield-shaded />
+                </p>
               </span>
-              <p>{{ countryData.total_cases }}</p>
-            </span>
-          </div>
-        </div>
-        <!--  -->
-
-        <!-- Recovered -->
-        <div class="confirmed-box">
-          <p class="confirmed-box--title">
-            Recovered
-          </p>
-          <div class="confirmed-box--number padding-zero">
-            <span class="confirmed-box--number--recovered">
-              {{ countryData.total_recovered }}
-              <p>
-                <b-icon-shield-shaded />
-              </p>
-            </span>
-          </div>
-        </div>
-        <!--  -->
-      </b-col>
-      <b-col class="boxs-col">
-        <!-- active -->
-        <div class="confirmed-box">
-          <p class="confirmed-box--title">
-            active
-          </p>
-          <div class="confirmed-box--number">
-            <span class="confirmed-box--number--deceased">
-              {{ countryData.active_cases }}
-              <p class="critical-case">
-                <b-icon-exclamation-circle style="font-size:15px" />
-                {{ countryData.serious_critical }}
-              </p>
-            </span>
-          </div>
-        </div>
-        <!--  -->
-
-        <!-- Deaths -->
-        <div class="confirmed-box">
-          <p class="confirmed-box--title">
-            Deaths
-          </p>
-          <div class="confirmed-box--number padding-zero">
-            <span class="confirmed-box--number--NewDeaths">
-              <span>
-                <b-icon-arrow-up class="arrow" />
-                {{ countryData.new_deaths }}
-              </span>
-              <p>{{ countryData.total_deaths }}</p>
-            </span>
-          </div>
-        </div>
-        <!--  -->
-      </b-col>
-    </b-row>
-
-        <template v-slot:overlay>
-          <div class="text-center">
-            <b-icon
-              v-if="badResponse !== true"
-              icon="stopwatch"
-              font-scale="3"
-              animation="cylon"
-            ></b-icon>
-            <p v-if="badResponse !== true" id="cancel-label">Please wait...</p>
-            <div v-if="badResponse === true" class="bad-response">
-              <p class="bad-response--text" id="refresh-label">
-                <b-icon-arrow-repeat />
-                Please Refresh This Page..!
-              </p>
             </div>
-
-            <b-button
-              ref="cancel"
-              variant="outline-danger"
-              size="sm"
-              aria-describedby="cancel-label"
-              @click="show = false"
-            >
-              Cancel
-            </b-button>
-
-            <b-button
-              class="ml-3"
-              v-if="badResponse === true"
-              variant="outline-success"
-              size="sm"
-              @click="reloadPage()"
-            >
-              Reload
-            </b-button>
           </div>
-        </template>
-      </b-overlay>
+          <!--  -->
+        </b-col>
+        <b-col class="boxs-col">
+          <!-- active -->
+          <div class="confirmed-box">
+            <p class="confirmed-box--title">
+              active
+            </p>
+            <div class="confirmed-box--number">
+              <span class="confirmed-box--number--deceased">
+                {{ countryData.active }}
+                <p class="critical-case">
+                  <b-icon-exclamation-circle style="font-size:15px" />
+                  {{ countryData.critical }}
+                </p>
+              </span>
+            </div>
+          </div>
+          <!--  -->
+
+          <!-- Deaths -->
+          <div class="confirmed-box">
+            <p class="confirmed-box--title">
+              Deaths
+            </p>
+            <div class="confirmed-box--number padding-zero">
+              <span class="confirmed-box--number--NewDeaths">
+                <span>
+                  <b-icon-arrow-up class="arrow" />
+                  {{ countryData.todayDeaths }}
+                </span>
+                <p>{{ countryData.deaths }}</p>
+              </span>
+            </div>
+          </div>
+          <!--  -->
+        </b-col>
+      </b-row>
+
+      <!-- additional data -->
+      <b-col class="additional-data-box">
+        <b-col class="additional-data-box--col">
+          <b-row class="additional-data-box--row">
+            <p class="data-box--title">
+              tests:
+            </p>
+            <div class="data-box--number padding-zero">
+              <span class="data-box--number">
+                {{ countryData.tests }}
+              </span>
+            </div>
+          </b-row>
+          <b-row class="additional-data-box--row">
+            <p class="data-box--title">
+              tests.pom:
+            </p>
+            <div class="data-box--number padding-zero">
+              <span class="data-box--number">
+                {{ countryData.testsPerOneMillion }}
+              </span>
+            </div>
+          </b-row>
+        </b-col>
+        <b-col class="additional-data-box--col">
+          <b-row class="additional-data-box--row">
+            <p class="data-box--title">
+              cases.pom:
+            </p>
+            <div class="data-box--number padding-zero">
+              <span class="data-box--number--confirmed">
+                {{ countryData.casesPerOneMillion }}
+              </span>
+            </div>
+          </b-row>
+          <b-row class="additional-data-box--row">
+            <p class="data-box--title">
+              deaths.pom:
+            </p>
+            <div class="data-box--number padding-zero">
+              <span class="data-box--number--NewDeaths">
+                {{ countryData.deathsPerOneMillion }}
+              </span>
+            </div>
+          </b-row>
+        </b-col>
+      </b-col>
+
+      <!--  -->
+
+      <template v-slot:overlay>
+        <div class="text-center">
+          <b-icon
+            v-if="badResponse !== true"
+            icon="stopwatch"
+            font-scale="3"
+            animation="cylon"
+          ></b-icon>
+          <p v-if="badResponse !== true" id="cancel-label">Please wait...</p>
+          <div v-if="badResponse === true" class="bad-response">
+            <p class="bad-response--text" id="refresh-label">
+              <b-icon-arrow-repeat />
+              Please Refresh This Page..!
+            </p>
+          </div>
+
+          <b-button
+            ref="cancel"
+            variant="outline-danger"
+            size="sm"
+            aria-describedby="cancel-label"
+            @click="show = false"
+          >
+            Cancel
+          </b-button>
+
+          <b-button
+            class="ml-3"
+            v-if="badResponse === true"
+            variant="outline-success"
+            size="sm"
+            @click="reloadPage()"
+          >
+            Reload
+          </b-button>
+        </div>
+      </template>
+    </b-overlay>
 
     <!-- IconBar -->
     <b-card class="navbar-icon" no-body>
@@ -202,14 +249,12 @@ export default {
   data: () => ({
     countryData: {},
     countrySelected: null,
-    date: {},
     nullMsg: true,
     show: false,
     badResponse: false
   }),
   beforeMount() {
     this.countrySelected = localStorage.getItem("countrySelected");
-    this.date = localStorage.getItem("lastUpdate");
     if (!this.countrySelected) {
       this.nullMsg = true;
     } else {
@@ -229,20 +274,9 @@ export default {
       this.badResponse = false;
 
       axios
-        .get(
-          `https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?search=${this.countrySelected}`
-        )
+        .get(`https://corona.lmao.ninja/countries/${this.countrySelected}`)
         .then(response => {
-          localStorage.setItem(
-            "dataCountry",
-            JSON.stringify(response.data.data.rows[0])
-          );
-          localStorage.setItem(
-            "lastUpdate",
-            JSON.stringify(response.data.data.last_update)
-          );
-          console.log(response);
-
+          localStorage.setItem("dataCountry", JSON.stringify(response.data));
           if (response.status === 200) {
             this.show = false;
             location.reload();
@@ -269,9 +303,7 @@ export default {
   },
   computed: {
     lastUpdate() {
-      return moment(
-        moment(this.date, ["DDMMMMY HH:mm", "MMMMDDY HH:mm"]).utc(true)
-      ).fromNow();
+      return moment(moment(this.countryData.updated).utc(false)).fromNow();
     }
   }
 };
@@ -286,7 +318,7 @@ export default {
     overflow-y: scroll
 .header-container
     display: flex
-    height: 34.5vh
+    height: 36vh
     background: #222B45
     overflow: hidden
     padding: 0
@@ -351,7 +383,7 @@ export default {
 .boxs
     width: 90vw
     height: 90vw
-    margin: 0px auto
+    margin: -45px auto
     display: flex
     // margin-bottom: 3em
     .boxs-col
@@ -359,10 +391,11 @@ export default {
             margin: 15% 0px
             height: 40%
             background: #FFFFFF
-            box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.1)
+            box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.08)
             display: flex
             flex-direction: column
             justify-content: center
+            border-radius: 10px
             &--title
                 font-style: normal
                 font-weight: bold
@@ -426,4 +459,62 @@ export default {
     color: #FF073A !important
     align-self: center
     font-weight: 900
+.additional-data-box
+  width: 82vw
+  height: auto
+  margin: 2em auto 10vh
+  display: flex
+  box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.08)
+  flex-direction: column
+  border-radius: 10px
+  &--col
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: center
+  &--row
+    padding: 0em 1em
+    .data-box
+      &--title
+        position: static
+        font-style: normal
+        font-weight: bold
+        font-size: 10px
+        line-height: 14px
+        letter-spacing: 0.05em
+        text-transform: uppercase
+        color: #8391A7
+        align-self: center
+        margin: 8px 4px
+      &--number
+        position: static
+        font-style: normal
+        font-weight: 500
+        font-size: 12px
+        line-height: 18px
+        margin: 10px 4px
+        &--confirmed
+          color: #FF073A
+          p
+            font-weight: 100
+            font-size: 12px
+            margin: 0
+        &--NewDeaths
+          color: #6C757D
+          p
+            font-weight: 100
+            font-size: 12px
+            margin: 0
+        &--recovered
+          color: #28A745
+          p
+            font-weight: 100
+            font-size: 12px
+            margin: 0
+        &--deceased
+          color: #007BFF
+          p
+            font-weight: 100
+            font-size: 12px
+            margin: 0
 </style>

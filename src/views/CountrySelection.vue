@@ -44,7 +44,7 @@
             <!-- <img
               :src="`http://www.countryflags.io/${countries.flag}/shiny/16.png`"
             /> -->
-            <img :src="countries.flag" />
+            <img :src="countries.countryInfo.flag" />
             {{ countries.country }}
           </span>
         </b-list-group-item>
@@ -79,10 +79,10 @@ export default {
   beforeMount() {
     axios
       .get(
-        "https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?limit=250"
+        "https://corona.lmao.ninja/countries"
       )
       .then(response => {
-        this.countryList = response.data.data.rows.sort(function(a, b) {
+        this.countryList = response.data.sort(function(a, b) {
           const countryA = a.country.toLowerCase();
           const countryB = b.country.toLowerCase();
           if (countryA < countryB) return -1;
@@ -170,7 +170,7 @@ export default {
             background: #F1F2F6
             border-radius: 8px
     .country-list
-        height: auto
+        height: 100vh
         overflow-y: scroll
         &__item
             display: flex

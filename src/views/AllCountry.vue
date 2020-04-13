@@ -16,44 +16,38 @@
       </b-list-group-item>
       <!--  -->
 
-      <b-list-group-item
-        v-for="(countries, item) in rankList"
-        :key="item"
-        class="country-list__item"
-        lazy
-      >
-        <span class="country-list__item--title">
-          <span v-if="countries.country !== 'World'" class="rank-num">
-            {{ item }}.
-          </span>
-          <img class="country-list__item--image" :src="countries.flag" />
-          {{ countries.country }}
-          <router-link to="/WorldStatistics">
-            <b-icon-clipboard-data v-if="countries.country === 'World'" />
+      <!-- World -->
+      <b-list-group-item class="country-list__item" lazy>
+        <b-row class="country-list__item--title">
+          world
+          <router-link class="more-data" to="/WorldStatistics">
+            <b-icon-clipboard-data class="more-data--icon" /> 
+            More Data
           </router-link>
-          <!-- <span v-if="countries.country === 'World'" class="last-update">
-            Last updated {{ lastUpdate }}
-          </span> -->
-        </span>
+          <span class="reload-page">
+            <b-icon-arrow-repeat @click="reloadPage()" />
+          </span>
+        </b-row>
+
         <span class="country-list__item--details">
           <b-row class="country-list__item--datail-row">
             <span>
               <div class="detail-title">total</div>
               <div class="detail-number total">
-                {{ countries.total_cases }}
+                {{ worldData.cases }}
               </div>
             </span>
             <span>
               <div class="detail-title">confirmed</div>
               <div class="detail-number confirmed">
                 <b-icon-arrow-up />
-                {{ countries.new_cases }}
+                {{ worldData.todayCases }}
               </div>
             </span>
             <span>
               <div class="detail-title">serious critical</div>
               <div class="detail-number confirmed">
-                {{ countries.serious_critical }}
+                {{ worldData.critical }}
               </div>
             </span>
           </b-row>
@@ -61,20 +55,20 @@
             <span>
               <div class="detail-title">total deaths</div>
               <div class="detail-number deaths">
-                {{ countries.total_deaths }}
+                {{ worldData.deaths }}
               </div>
             </span>
             <span>
               <div class="detail-title">deaths</div>
               <div class="detail-number deaths">
                 <b-icon-arrow-up />
-                {{ countries.new_deaths }}
+                {{ worldData.todayDeaths }}
               </div>
             </span>
             <span>
               <div class="detail-title">total recovered</div>
               <div class="detail-number recovered">
-                {{ countries.total_recovered }}
+                {{ worldData.recovered }}
               </div>
             </span>
           </b-row>
@@ -82,11 +76,88 @@
             <span class="detail-title--end">
               <div class="detail-title--end--title">active cases</div>
               <div class="detail-title--end--number actived">
-                {{ countries.active_cases }}
+                {{ worldData.active }}
               </div>
             </span>
           </b-row>
-          <span class="last-update"> Last updated {{ lastUpdate }} </span>
+          <span class="last-update">
+            Last updated {{ lastUpdate(worldData.updated) }}
+          </span>
+        </span>
+      </b-list-group-item>
+      <!--  -->
+
+      <b-list-group-item
+        v-for="(countries, item) in rankList"
+        :key="item"
+        class="country-list__item"
+        lazy
+      >
+        <b-row class="country-list__item--title">
+          <span class="rank-num"> {{ item + 1 }}. </span>
+          <img
+            class="country-list__item--image"
+            :src="countries.countryInfo.flag"
+          />
+          {{ countries.country }}
+          <span class="reload-page">
+            <b-icon-arrow-repeat @click="reloadPage()" />
+          </span>
+        </b-row>
+        <span class="country-list__item--details">
+          <b-row class="country-list__item--datail-row">
+            <span>
+              <div class="detail-title">total</div>
+              <div class="detail-number total">
+                {{ countries.cases }}
+              </div>
+            </span>
+            <span>
+              <div class="detail-title">confirmed</div>
+              <div class="detail-number confirmed">
+                <b-icon-arrow-up />
+                {{ countries.todayCases }}
+              </div>
+            </span>
+            <span>
+              <div class="detail-title">serious critical</div>
+              <div class="detail-number confirmed">
+                {{ countries.critical }}
+              </div>
+            </span>
+          </b-row>
+          <b-row class="country-list__item--datail-row">
+            <span>
+              <div class="detail-title">total deaths</div>
+              <div class="detail-number deaths">
+                {{ countries.deaths }}
+              </div>
+            </span>
+            <span>
+              <div class="detail-title">deaths</div>
+              <div class="detail-number deaths">
+                <b-icon-arrow-up />
+                {{ countries.todayDeaths }}
+              </div>
+            </span>
+            <span>
+              <div class="detail-title">total recovered</div>
+              <div class="detail-number recovered">
+                {{ countries.recovered }}
+              </div>
+            </span>
+          </b-row>
+          <b-row class="country-list__item--datail-row">
+            <span class="detail-title--end">
+              <div class="detail-title--end--title">active cases</div>
+              <div class="detail-title--end--number actived">
+                {{ countries.active }}
+              </div>
+            </span>
+          </b-row>
+          <span class="last-update">
+            Last updated {{ lastUpdate(countries.updated) }}
+          </span>
         </span>
       </b-list-group-item>
 
@@ -100,14 +171,6 @@
           <b-spinner small class="loading--spin" />
         </span>
       </b-list-group-item>
-      <!--  -->
-
-      <!-- loadMore -->
-      <b-icon-plus-circle
-        @click="loadMore()"
-        v-if="loadingSpin !== true && badResponse !== true"
-      />
-
       <!--  -->
     </b-list-group>
 
@@ -151,19 +214,16 @@ export default {
   name: "TopTen",
   data: () => ({
     rankList: {},
+    worldData: {},
     date: {},
-    pageNumber: 1,
     badResponse: false,
     loadingSpin: true
   }),
   beforeMount() {
     axios
-      .get(
-        "https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search"
-      )
+      .get("https://corona.lmao.ninja/countries?sort=cases")
       .then(response => {
-        this.rankList = response.data.data.rows;
-        this.date = response.data.data.last_update;
+        this.rankList = response.data;
         this.loadingSpin = false;
         if (response.status !== 200) {
           this.badResponse = true;
@@ -174,42 +234,32 @@ export default {
         this.loadingSpin = false;
         this.badResponse = true;
       });
+
+    // world
+    axios
+      .get("https://corona.lmao.ninja/all")
+      .then(response => {
+        this.worldData = response.data;
+        this.loadingSpin = false;
+        if (response.status !== 200) {
+          this.badResponse = true;
+        }
+      })
+      .catch(error => {
+        console.log(error, "get worldData in AllCountry error");
+        this.loadingSpin = false;
+        this.badResponse = true;
+      });
+    //
   },
   methods: {
     reloadPage() {
       location.reload();
     },
-    loadMore() {
-      if (this.pageNumber < 23) {
-        this.loadingSpin = true;
-        axios
-          .get(
-            `https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?page=${++this
-              .pageNumber}`
-          )
-          .then(response => {
-            for (const i of response.data.data.rows) {
-              this.rankList.push(i);
-            }
-            this.date = response.data.data.last_update;
-            this.loadingSpin = false;
-            if (response.status !== 200) {
-              this.badResponse = true;
-            }
-          })
-          .catch(error => {
-            this.loadingSpin = false;
-            this.badResponse = true;
-            console.log(error, "loadMore error");
-          });
-      }
-    }
-  },
-  computed: {
-    lastUpdate() {
-      return moment(
-        moment(this.date, ["DDMMMMY HH:mm", "MMMMDDY HH:mm"]).utc(true)
-      ).fromNow();
+    lastUpdate(date) {
+      return moment(date)
+        .utc(false)
+        .fromNow();
     }
   }
 };
@@ -250,8 +300,11 @@ export default {
         font-size: 18px
         line-height: 22px
         color: #1C2C40
-        align-self: flex-start
+        //align-self: flex-start
         margin: 0px 0px 10px 6px
+        //display: flex
+        .reload-page
+          margin-left: auto
       &--image
         width: 8vw
         object-fit: cover
@@ -341,4 +394,9 @@ export default {
     color: #FF073A !important
     align-self: center
     font-weight: 900
+.more-data
+  margin-left: inherit
+  font-size: 10px
+  &--icon
+    font-size: 16px !important
 </style>
