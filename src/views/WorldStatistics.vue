@@ -208,6 +208,7 @@ export default {
       box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.05)
       border: none
       margin-bottom: 2vh
+      border-radius: 20px
       &--title
         position: static
         font-style: normal
@@ -299,10 +300,12 @@ export default {
   justify-content: center
   letter-spacing: 2px
   margin-top: 3vw
+  box-shadow: none !important
   &--spin
     margin-left: 1em
 .bad-response
   margin-top: 3vw
+  box-shadow: none !important
   &--text
     color: #FF073A !important
     align-self: center
