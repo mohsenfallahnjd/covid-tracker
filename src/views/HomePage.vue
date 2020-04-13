@@ -1,6 +1,6 @@
 <template>
   <div id="home-page" class="home-page">
-    <div>
+
       <b-overlay :show="show" rounded="sm" @shown="onShown" @hidden="onHidden">
         <b-container
           class="header-container"
@@ -47,77 +47,80 @@
           <!--  -->
         </b-container>
 
-        <!-- Confirmed -->
-        <b-row class="boxs">
-          <b-col class="boxs-col">
-            <div class="confirmed-box">
-              <p class="confirmed-box--title">
-                Confirmed
-              </p>
-              <div class="confirmed-box--number">
-                <span class="confirmed-box--number--confirmed">
-                  <span>
-                    <b-icon-arrow-up class="arrow" />
-                    {{ countryData.new_cases }}
-                  </span>
-                  <p>{{ countryData.total_cases }}</p>
-                </span>
-              </div>
-            </div>
-            <!--  -->
 
-            <!-- Recovered -->
-            <div class="confirmed-box">
-              <p class="confirmed-box--title">
-                Recovered
-              </p>
-              <div class="confirmed-box--number padding-zero">
-                <span class="confirmed-box--number--recovered">
-                  {{ countryData.total_recovered }}
-                  <p>
-                    <b-icon-shield-shaded />
-                  </p>
-                </span>
-              </div>
-            </div>
-            <!--  -->
-          </b-col>
-          <b-col class="boxs-col">
-            <!-- active -->
-            <div class="confirmed-box">
-              <p class="confirmed-box--title">
-                active
-              </p>
-              <div class="confirmed-box--number">
-                <span class="confirmed-box--number--deceased">
-                  {{ countryData.active_cases }}
-                  <p class="critical-case">
-                    <b-icon-exclamation-circle style="font-size:15px" />
-                    {{ countryData.serious_critical }}
-                  </p>
-                </span>
-              </div>
-            </div>
-            <!--  -->
 
-            <!-- Deaths -->
-            <div class="confirmed-box">
-              <p class="confirmed-box--title">
-                Deaths
+
+    <!-- Confirmed -->
+    <b-row class="boxs">
+      <b-col class="boxs-col">
+        <div class="confirmed-box">
+          <p class="confirmed-box--title">
+            Confirmed
+          </p>
+          <div class="confirmed-box--number">
+            <span class="confirmed-box--number--confirmed">
+              <span>
+                <b-icon-arrow-up class="arrow" />
+                {{ countryData.new_cases }}
+              </span>
+              <p>{{ countryData.total_cases }}</p>
+            </span>
+          </div>
+        </div>
+        <!--  -->
+
+        <!-- Recovered -->
+        <div class="confirmed-box">
+          <p class="confirmed-box--title">
+            Recovered
+          </p>
+          <div class="confirmed-box--number padding-zero">
+            <span class="confirmed-box--number--recovered">
+              {{ countryData.total_recovered }}
+              <p>
+                <b-icon-shield-shaded />
               </p>
-              <div class="confirmed-box--number padding-zero">
-                <span class="confirmed-box--number--NewDeaths">
-                  <span>
-                    <b-icon-arrow-up class="arrow" />
-                    {{ countryData.new_deaths }}
-                  </span>
-                  <p>{{ countryData.total_deaths }}</p>
-                </span>
-              </div>
-            </div>
-            <!--  -->
-          </b-col>
-        </b-row>
+            </span>
+          </div>
+        </div>
+        <!--  -->
+      </b-col>
+      <b-col class="boxs-col">
+        <!-- active -->
+        <div class="confirmed-box">
+          <p class="confirmed-box--title">
+            active
+          </p>
+          <div class="confirmed-box--number">
+            <span class="confirmed-box--number--deceased">
+              {{ countryData.active_cases }}
+              <p class="critical-case">
+                <b-icon-exclamation-circle style="font-size:15px" />
+                {{ countryData.serious_critical }}
+              </p>
+            </span>
+          </div>
+        </div>
+        <!--  -->
+
+        <!-- Deaths -->
+        <div class="confirmed-box">
+          <p class="confirmed-box--title">
+            Deaths
+          </p>
+          <div class="confirmed-box--number padding-zero">
+            <span class="confirmed-box--number--NewDeaths">
+              <span>
+                <b-icon-arrow-up class="arrow" />
+                {{ countryData.new_deaths }}
+              </span>
+              <p>{{ countryData.total_deaths }}</p>
+            </span>
+          </div>
+        </div>
+        <!--  -->
+      </b-col>
+    </b-row>
 
         <template v-slot:overlay>
           <div class="text-center">
@@ -157,7 +160,6 @@
           </div>
         </template>
       </b-overlay>
-    </div>
 
     <!-- IconBar -->
     <b-card class="navbar-icon" no-body>
@@ -281,9 +283,10 @@ export default {
     width: 100%
     height: 100%
     background: #FFFFFF
+    overflow-y: scroll
 .header-container
     display: flex
-    height: 34.5%
+    height: 34.5vh
     background: #222B45
     overflow: hidden
     padding: 0
@@ -350,6 +353,7 @@ export default {
     height: 90vw
     margin: 0px auto
     display: flex
+    // margin-bottom: 3em
     .boxs-col
         .confirmed-box
             margin: 15% 0px
