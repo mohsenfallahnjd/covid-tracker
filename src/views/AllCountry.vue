@@ -70,8 +70,8 @@
                 {{ countries.active_cases }}
               </div>
             </span>
-            <span class="last-update"> Last updated {{ lastUpdate }} </span>
           </b-row>
+          <span class="last-update"> Last updated {{ lastUpdate }} </span>
         </span>
       </b-list-group-item>
       <!-- loadMore -->
@@ -188,6 +188,10 @@ export default {
       box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.05)
       border: none
       margin-bottom: 2vh
+      &--details
+        display: flex
+        flex-direction: column
+        align-items: center
       &--title
         position: static
         font-style: normal
@@ -264,8 +268,9 @@ export default {
 .last-update
   font-size: 9px !important
   font-weight: 500
-  margin: auto
-  //margin-left: 3em
+
+  // margin: auto
+  // margin-left: 3em
 .rank-num
     font-size: 10px
     margin-right: 3px
