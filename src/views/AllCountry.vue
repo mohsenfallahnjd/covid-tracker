@@ -8,9 +8,9 @@
         lazy
       >
         <span class="country-list__item--title">
-          <span v-if="countries.country !== 'World'" class="rank-num"
-            >{{ item }}.</span
-          >
+          <span v-if="countries.country !== 'World'" class="rank-num">
+            {{ item }}.
+          </span>
           <img class="country-list__item--image" :src="countries.flag" />
           {{ countries.country }}
           <router-link to="/WorldStatistics">
@@ -73,6 +73,9 @@
           </b-row>
         </span>
       </b-list-group-item>
+      <!-- loadMore -->
+      <b-icon-plus-circle @click="loadMore()" />
+      <!--  -->
     </b-list-group>
 
     <!-- IconBar -->
@@ -115,20 +118,41 @@ export default {
   name: "TopTen",
   data: () => ({
     rankList: {},
-    date: {}
+    date: {},
+    pageNumber: 1
   }),
   beforeMount() {
     axios
       .get(
-        "https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?limit=250"
+        "https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search"
       )
       .then(response => {
         this.rankList = response.data.data.rows;
         this.date = response.data.data.last_update;
       })
       .catch(error => {
-        console.log(error);
+        console.log(error, "get CountryList in AllCountry error");
       });
+  },
+  methods: {
+    loadMore() {
+      if (this.pageNumber < 23) {
+        axios
+          .get(
+            `https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?page=${++this
+              .pageNumber}`
+          )
+          .then(response => {
+            for (const i of response.data.data.rows) {
+              this.rankList.push(i);
+            }
+            this.date = response.data.data.last_update;
+          })
+          .catch(error => {
+            console.log(error, "loadMore error");
+          });
+      }
+    }
   },
   computed: {
     lastUpdate() {
@@ -149,7 +173,7 @@ export default {
   background: #FFFFFF
   .country-list
     margin-top: 3vh
-    margin-bottom: 7vh
+    margin-bottom: 9vh
     // overflow-y: scroll
     display: flex
     align-items: center
