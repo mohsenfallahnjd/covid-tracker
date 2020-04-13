@@ -16,9 +16,9 @@
           <router-link to="/WorldStatistics">
             <b-icon-clipboard-data v-if="countries.country === 'World'" />
           </router-link>
-          <span v-if="countries.country === 'World'" class="last-update">
+          <!-- <span v-if="countries.country === 'World'" class="last-update">
             Last updated {{ lastUpdate }}
-          </span>
+          </span> -->
         </span>
         <span class="country-list__item--details">
           <b-row class="country-list__item--datail-row">
@@ -70,6 +70,7 @@
                 {{ countries.active_cases }}
               </div>
             </span>
+            <span class="last-update"> Last updated {{ lastUpdate }} </span>
           </b-row>
         </span>
       </b-list-group-item>
@@ -262,7 +263,9 @@ export default {
   font-weight: 600 !important
 .last-update
   font-size: 9px !important
-  margin-left: 3em
+  font-weight: 500
+  margin: auto
+  //margin-left: 3em
 .rank-num
     font-size: 10px
     margin-right: 3px
