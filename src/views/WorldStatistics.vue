@@ -1,6 +1,33 @@
 <template>
   <div class="world-statistics-page">
     <b-list-group class="country-list">
+      <!-- badResponse Message -->
+      <b-list-group-item
+        v-if="badResponse === true"
+        class="country-list__item bad-response"
+        @click="reloadPage()"
+      >
+        <span class="country-list__item--country bad-response--text">
+          Please Refresh This Page..!
+        </span>
+        <span class="country-list__item--country bad-response--text">
+          --- Tap to reload ---
+        </span>
+      </b-list-group-item>
+      <!--  -->
+
+      <!-- loading -->
+      <b-list-group-item
+        v-if="loadingSpin === true"
+        class="country-list__item loading"
+      >
+        <span class="country-list__item--country">
+          <strong>Loading . . .</strong>
+          <b-spinner small class="loading--spin" />
+        </span>
+      </b-list-group-item>
+      <!--  -->
+
       <b-list-group-item class="country-list__item">
         <span class="country-list__item--title">
           <b-icon-caret-left-fill
@@ -116,7 +143,9 @@ export default {
   name: "WorldStatistics",
   data: () => ({
     worldData: {},
-    date: {}
+    date: {},
+    badResponse: false,
+    loadingSpin: true
   }),
   beforeMount() {
     axios
@@ -126,8 +155,11 @@ export default {
       .then(response => {
         this.worldData = response.data.data;
         this.date = response.data.data.last_update;
+        this.loadingSpin = false;
       })
       .catch(error => {
+        this.loadingSpin = false;
+        this.badResponse = true;
         console.log(error);
       });
   },
@@ -141,6 +173,9 @@ export default {
   methods: {
     goBack() {
       this.$router.go(-1);
+    },
+    reloadPage() {
+      location.reload();
     }
   }
 };
@@ -258,4 +293,18 @@ export default {
   padding: 0px !important
 .back-btn
     padding-right: 2em
+.loading
+  display: flex
+  align-items: center
+  justify-content: center
+  letter-spacing: 2px
+  margin-top: 3vw
+  &--spin
+    margin-left: 1em
+.bad-response
+  margin-top: 3vw
+  &--text
+    color: #FF073A !important
+    align-self: center
+    font-weight: 900
 </style>

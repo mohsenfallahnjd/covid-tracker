@@ -49,6 +49,18 @@
           </span>
         </b-list-group-item>
       </router-link>
+
+      <!-- loading -->
+      <b-list-group-item
+        v-if="loadingSpin === true"
+        class="country-list__item loading"
+      >
+        <span class="country-list__item--country ">
+          <strong>Loading . . .</strong>
+          <b-spinner small class="loading--spin" />
+        </span>
+      </b-list-group-item>
+      <!--  -->
     </b-list-group>
     <!--  -->
   </div>
@@ -61,7 +73,8 @@ export default {
   data: () => ({
     countryList: [],
     search: "",
-    badResponse: false
+    badResponse: false,
+    loadingSpin: true
   }),
   beforeMount() {
     axios
@@ -76,15 +89,17 @@ export default {
           if (countryA > countryB) return 1;
           return 0;
         });
+        this.loadingSpin = false;
         if (response.status !== 200) {
           this.badResponse = true;
         }
       })
       .catch(error => {
-        console.log(error, "CountryList Get erorr");
+        this.loadingSpin = false;
         this.badResponse = true;
+        console.log(error, "CountryList Get erorr");
       });
-      
+
     localStorage.setItem("flag", false);
   },
   methods: {
@@ -155,7 +170,7 @@ export default {
             background: #F1F2F6
             border-radius: 8px
     .country-list
-        height: 450px
+        height: auto
         overflow-y: scroll
         &__item
             display: flex
@@ -185,4 +200,10 @@ export default {
 .bad-response
   color: #FF073A !important
   justify-content: center
+  font-weight: 900
+.loading
+  justify-content: center
+  letter-spacing: 2px
+  &--spin
+    margin-left: 1em
 </style>

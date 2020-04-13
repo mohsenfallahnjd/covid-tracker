@@ -1,6 +1,21 @@
 <template>
   <div class="top-ten-page">
     <b-list-group class="country-list">
+      <!-- badResponse Message -->
+      <b-list-group-item
+        v-if="badResponse === true"
+        class="country-list__item bad-response"
+        @click="reloadPage()"
+      >
+        <span class="country-list__item--country bad-response--text">
+          Please Refresh This Page..!
+        </span>
+        <span class="country-list__item--country bad-response--text">
+          --- Tap to reload ---
+        </span>
+      </b-list-group-item>
+      <!--  -->
+
       <b-list-group-item
         v-for="(countries, item) in rankList"
         :key="item"
@@ -74,8 +89,25 @@
           <span class="last-update"> Last updated {{ lastUpdate }} </span>
         </span>
       </b-list-group-item>
+
+      <!-- loading -->
+      <b-list-group-item
+        v-if="loadingSpin === true"
+        class="country-list__item loading"
+      >
+        <span class="country-list__item--country">
+          <strong>Loading . . .</strong>
+          <b-spinner small class="loading--spin" />
+        </span>
+      </b-list-group-item>
+      <!--  -->
+
       <!-- loadMore -->
-      <b-icon-plus-circle @click="loadMore()" />
+      <b-icon-plus-circle
+        @click="loadMore()"
+        v-if="loadingSpin !== true && badResponse !== true"
+      />
+
       <!--  -->
     </b-list-group>
 
@@ -120,7 +152,9 @@ export default {
   data: () => ({
     rankList: {},
     date: {},
-    pageNumber: 1
+    pageNumber: 1,
+    badResponse: false,
+    loadingSpin: true
   }),
   beforeMount() {
     axios
@@ -130,14 +164,24 @@ export default {
       .then(response => {
         this.rankList = response.data.data.rows;
         this.date = response.data.data.last_update;
+        this.loadingSpin = false;
+        if (response.status !== 200) {
+          this.badResponse = true;
+        }
       })
       .catch(error => {
         console.log(error, "get CountryList in AllCountry error");
+        this.loadingSpin = false;
+        this.badResponse = true;
       });
   },
   methods: {
+    reloadPage() {
+      location.reload();
+    },
     loadMore() {
       if (this.pageNumber < 23) {
+        this.loadingSpin = true;
         axios
           .get(
             `https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?page=${++this
@@ -148,8 +192,14 @@ export default {
               this.rankList.push(i);
             }
             this.date = response.data.data.last_update;
+            this.loadingSpin = false;
+            if (response.status !== 200) {
+              this.badResponse = true;
+            }
           })
           .catch(error => {
+            this.loadingSpin = false;
+            this.badResponse = true;
             console.log(error, "loadMore error");
           });
       }
@@ -274,4 +324,18 @@ export default {
 .rank-num
     font-size: 10px
     margin-right: 3px
+.loading
+  display: flex
+  align-items: center
+  justify-content: center
+  letter-spacing: 2px
+  margin-top: 3vw
+  &--spin
+    margin-left: 1em
+.bad-response
+  margin-top: 3vw
+  &--text
+    color: #FF073A !important
+    align-self: center
+    font-weight: 900
 </style>
