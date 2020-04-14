@@ -58,9 +58,9 @@
               <span class="confirmed-box--number--confirmed">
                 <span>
                   <b-icon-arrow-up class="arrow" />
-                  {{ countryData.todayCases }}
+                  {{ formatNumber(countryData.todayCases)  }}
                 </span>
-                <p>{{ countryData.cases }}</p>
+                <p>{{ formatNumber(countryData.cases) }}</p>
               </span>
             </div>
             <div class="planet-chart">
@@ -76,7 +76,7 @@
             </p>
             <div class="confirmed-box--number padding-zero">
               <span class="confirmed-box--number--recovered">
-                {{ countryData.recovered }}
+                {{ formatNumber(countryData.recovered) }}
                 <p>
                   <b-icon-shield-shaded />
                 </p>
@@ -96,10 +96,10 @@
             </p>
             <div class="confirmed-box--number">
               <span class="confirmed-box--number--active">
-                {{ countryData.active }}
+                {{ formatNumber(countryData.active) }}
                 <p class="critical-case">
                   <b-icon-exclamation-circle style="font-size:15px" />
-                  {{ countryData.critical }}
+                  {{ formatNumber(countryData.critical) }}
                 </p>
               </span>
             </div>
@@ -115,9 +115,9 @@
               <span class="confirmed-box--number--NewDeaths">
                 <span>
                   <b-icon-arrow-up class="arrow" />
-                  {{ countryData.todayDeaths }}
+                  {{ formatNumber(countryData.todayDeaths) }}
                 </span>
-                <p>{{ countryData.deaths }}</p>
+                <p>{{ formatNumber(countryData.deaths) }}</p>
               </span>
             </div>
             <div class="planet-chart">
@@ -137,7 +137,7 @@
             </p>
             <div class="data-box--number padding-zero">
               <span class="data-box--number">
-                {{ countryData.tests }}
+                {{ formatNumber(countryData.tests) }}
               </span>
             </div>
           </b-row>
@@ -147,7 +147,7 @@
             </p>
             <div class="data-box--number padding-zero">
               <span class="data-box--number">
-                {{ countryData.testsPerOneMillion }}
+                {{ formatNumber(countryData.testsPerOneMillion) }}
               </span>
             </div>
           </b-row>
@@ -159,7 +159,7 @@
             </p>
             <div class="data-box--number padding-zero">
               <span class="data-box--number--confirmed">
-                {{ countryData.casesPerOneMillion }}
+                {{ formatNumber(countryData.casesPerOneMillion) }}
               </span>
             </div>
           </b-row>
@@ -169,7 +169,7 @@
             </p>
             <div class="data-box--number padding-zero">
               <span class="data-box--number--NewDeaths">
-                {{ countryData.deathsPerOneMillion }}
+                {{ formatNumber(countryData.deathsPerOneMillion) }}
               </span>
             </div>
           </b-row>
@@ -385,6 +385,10 @@ export default {
           }
         }
       });
+    },
+    formatNumber(num) {
+      num = `${num}`;
+      return num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     }
   },
   computed: {
@@ -404,7 +408,7 @@ export default {
     overflow-y: scroll
 .header-container
     display: flex
-    height: 36vh
+    height: 34vh
     background: #222B45
     overflow: hidden
     padding: 0
@@ -419,6 +423,7 @@ export default {
         align-self: center
         justify-self: center
         margin-left: 8vw
+        padding-bottom: 2em
         h6
             position: static
             font-style: normal
@@ -469,13 +474,14 @@ export default {
 .boxs
     width: 90vw
     height: 90vw
-    margin: -45px auto
+    margin: -60px auto
     display: flex
     // margin-bottom: 3em
     .boxs-col
+        padding: 0px 10px
         .confirmed-box
-            margin: 15% 0px
-            height: 40%
+            margin: 10% 0px
+            height: 45%
             background: #FFFFFF
             box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.08)
             display: flex
@@ -497,7 +503,7 @@ export default {
                 font-style: normal
                 font-weight: bold
                 // font-weight: 800
-                font-size: 19px
+                font-size: 21px
                 line-height: 30px
                 flex: none
                 order: 0
@@ -528,18 +534,20 @@ export default {
                     align-items: center
                     p
                       font-weight: 100
-                      font-size: 9px
+                      font-size: 10px
                       margin: 0
                       padding-left: 10px
+                      
                 &--active
                     color: #007BFF
                     //display: flex
                     //align-items: center
                     p
                       font-weight: 100
-                      font-size: 9px
+                      font-size: 12px
                       margin: 0
                       padding-left: 10px
+                      margin-top: 15px
 .null-msg
   font-size: 20px !important
   margin-right: 1vw !important
@@ -559,9 +567,9 @@ export default {
     align-self: center
     font-weight: 900
 .additional-data-box
-  width: 82vw
+  width: 85vw
   height: auto
-  margin: 3em auto 10vh
+  margin: 4.5em auto 10vh
   display: flex
   box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.08)
   flex-direction: column

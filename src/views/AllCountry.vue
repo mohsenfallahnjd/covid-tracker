@@ -21,7 +21,7 @@
         <b-row class="country-list__item--title">
           world
           <router-link class="more-data" to="/WorldStatistics">
-            <b-icon-clipboard-data class="more-data--icon" /> 
+            <b-icon-clipboard-data class="more-data--icon" />
             More Data
           </router-link>
           <span class="reload-page">
@@ -34,20 +34,20 @@
             <span>
               <div class="detail-title">total</div>
               <div class="detail-number total">
-                {{ worldData.cases }}
+                {{ formatNumber(worldData.cases) }}
               </div>
             </span>
             <span>
               <div class="detail-title">confirmed</div>
               <div class="detail-number confirmed">
                 <b-icon-arrow-up />
-                {{ worldData.todayCases }}
+                {{ formatNumber(worldData.todayCases) }}
               </div>
             </span>
             <span>
               <div class="detail-title">serious critical</div>
               <div class="detail-number confirmed">
-                {{ worldData.critical }}
+                {{ formatNumber(worldData.critical) }}
               </div>
             </span>
           </b-row>
@@ -55,20 +55,20 @@
             <span>
               <div class="detail-title">total deaths</div>
               <div class="detail-number deaths">
-                {{ worldData.deaths }}
+                {{ formatNumber(worldData.deaths) }}
               </div>
             </span>
             <span>
               <div class="detail-title">deaths</div>
               <div class="detail-number deaths">
                 <b-icon-arrow-up />
-                {{ worldData.todayDeaths }}
+                {{ formatNumber(worldData.todayDeaths) }}
               </div>
             </span>
             <span>
               <div class="detail-title">total recovered</div>
               <div class="detail-number recovered">
-                {{ worldData.recovered }}
+                {{ formatNumber(worldData.recovered) }}
               </div>
             </span>
           </b-row>
@@ -76,7 +76,7 @@
             <span class="detail-title--end">
               <div class="detail-title--end--title">active cases</div>
               <div class="detail-title--end--number actived">
-                {{ worldData.active }}
+                {{ formatNumber(worldData.active) }}
               </div>
             </span>
           </b-row>
@@ -109,20 +109,20 @@
             <span>
               <div class="detail-title">total</div>
               <div class="detail-number total">
-                {{ countries.cases }}
+                {{ formatNumber(countries.cases) }}
               </div>
             </span>
             <span>
               <div class="detail-title">confirmed</div>
               <div class="detail-number confirmed">
                 <b-icon-arrow-up />
-                {{ countries.todayCases }}
+                {{ formatNumber(countries.todayCases) }}
               </div>
             </span>
             <span>
               <div class="detail-title">serious critical</div>
               <div class="detail-number confirmed">
-                {{ countries.critical }}
+                {{ formatNumber(countries.critical) }}
               </div>
             </span>
           </b-row>
@@ -130,20 +130,20 @@
             <span>
               <div class="detail-title">total deaths</div>
               <div class="detail-number deaths">
-                {{ countries.deaths }}
+                {{ formatNumber(countries.deaths) }}
               </div>
             </span>
             <span>
               <div class="detail-title">deaths</div>
               <div class="detail-number deaths">
                 <b-icon-arrow-up />
-                {{ countries.todayDeaths }}
+                {{ formatNumber(countries.todayDeaths) }}
               </div>
             </span>
             <span>
               <div class="detail-title">total recovered</div>
               <div class="detail-number recovered">
-                {{ countries.recovered }}
+                {{ formatNumber(countries.recovered) }}
               </div>
             </span>
           </b-row>
@@ -151,7 +151,7 @@
             <span class="detail-title--end">
               <div class="detail-title--end--title">active cases</div>
               <div class="detail-title--end--number actived">
-                {{ countries.active }}
+                {{ formatNumber(countries.active) }}
               </div>
             </span>
           </b-row>
@@ -260,6 +260,10 @@ export default {
       return moment(date)
         .utc(false)
         .fromNow();
+    },
+    formatNumber(num) {
+      num = `${num}`;
+      return num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     }
   }
 };
@@ -302,13 +306,14 @@ export default {
         color: #1C2C40
         //align-self: flex-start
         margin: 0px 0px 10px 6px
-        //display: flex
+        // display: flex 
         .reload-page
           margin-left: auto
       &--image
-        width: 8vw
+        width: 31.5px //8vw
+        height: 21px //5vw
         object-fit: cover
-        margin-right: 3px
+        margin-right: 0.8em
         margin-bottom: 0.8vh
       &--datail-row
         display: flex
@@ -377,7 +382,8 @@ export default {
   // margin-left: 3em
 .rank-num
     font-size: 10px
-    margin-right: 3px
+    margin-right: 0.5em
+    padding-top: 0.4em
 .loading
   display: flex
   align-items: center
