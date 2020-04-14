@@ -63,6 +63,9 @@
                 <p>{{ countryData.cases }}</p>
               </span>
             </div>
+            <div class="planet-chart">
+              <canvas id="planet-chart-confirmed" />
+            </div>
           </div>
           <!--  -->
 
@@ -79,6 +82,9 @@
                 </p>
               </span>
             </div>
+            <div class="planet-chart">
+              <canvas id="planet-chart-recovered" />
+            </div>
           </div>
           <!--  -->
         </b-col>
@@ -89,7 +95,7 @@
               active
             </p>
             <div class="confirmed-box--number">
-              <span class="confirmed-box--number--deceased">
+              <span class="confirmed-box--number--active">
                 {{ countryData.active }}
                 <p class="critical-case">
                   <b-icon-exclamation-circle style="font-size:15px" />
@@ -113,6 +119,9 @@
                 </span>
                 <p>{{ countryData.deaths }}</p>
               </span>
+            </div>
+            <div class="planet-chart">
+              <canvas id="planet-chart-deaths" />
             </div>
           </div>
           <!--  -->
@@ -243,6 +252,7 @@
 <script>
 import moment from "moment";
 import axios from "axios";
+import Chart from "chart.js";
 
 export default {
   name: "HomePage",
@@ -251,9 +261,9 @@ export default {
     countrySelected: null,
     nullMsg: true,
     show: false,
-    badResponse: false
+    badResponse: false,
+    chartData: {}
   }),
-  // beforeMount() {},
   mounted() {
     this.countrySelected = localStorage.getItem("countrySelected");
     if (!this.countrySelected) {
@@ -266,11 +276,20 @@ export default {
       }
     }
     this.countryData = JSON.parse(localStorage.getItem("countryData"));
+    this.chartData = JSON.parse(localStorage.getItem("chartData"));
+    this.createChart("planet-chart-confirmed", this.chartData.cases, "#FF073A");
+    this.createChart("planet-chart-deaths", this.chartData.deaths, "#6C757D");
+    this.createChart(
+      "planet-chart-recovered",
+      this.chartData.recovered,
+      "#28A745"
+    );
   },
   methods: {
     reloadPage() {
       this.show = true;
       this.badResponse = false;
+      this.planetChartData();
 
       axios
         .get(`https://corona.lmao.ninja/countries/${this.countrySelected}`)
@@ -298,6 +317,74 @@ export default {
     },
     onHidden() {
       // this.$refs.show.focus();
+    },
+    planetChartData() {
+      axios
+        .get(
+          `https://corona.lmao.ninja/v2/historical/${localStorage.getItem(
+            "countrySelected"
+          )}`
+        )
+        .then(response => {
+          localStorage.setItem(
+            "chartData",
+            JSON.stringify(response.data.timeline)
+          );
+        })
+        .catch(error => {
+          console.log(error, "chartDataConfirmed.js error");
+        });
+    },
+    createChart(chartId, item, borderColor) {
+      const ctx = document.getElementById(chartId).getContext("2d");
+      Chart.defaults.global.legend.display = false;
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: Object.keys(item),
+          datasets: [
+            {
+              label: item,
+              data: Object.values(item),
+              fill: false,
+              borderColor: borderColor,
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          lineTension: 1,
+          scales: {
+            xAxes: [
+              {
+                gridLines: {
+                  display: false
+                },
+
+                ticks: {
+                  display: false
+                }
+              }
+            ],
+            yAxes: [
+              {
+                gridLines: {
+                  display: false
+                },
+                ticks: {
+                  display: false
+                }
+              }
+            ]
+          },
+          elements: {
+            point: {
+              radius: 0
+            }
+          }
+        }
+      });
     }
   },
   computed: {
@@ -395,6 +482,7 @@ export default {
             flex-direction: column
             justify-content: center
             border-radius: 10px
+            width: auto
             &--title
                 font-style: normal
                 font-weight: bold
@@ -409,8 +497,8 @@ export default {
                 font-style: normal
                 font-weight: bold
                 // font-weight: 800
-                font-size: 25px
-                line-height: 36px
+                font-size: 19px
+                line-height: 30px
                 flex: none
                 order: 0
                 align-self: center
@@ -418,28 +506,40 @@ export default {
                 // padding-bottom: 32px
                 &--confirmed
                     color: #FF073A
+                    display: flex
+                    align-items: center
                     p
                       font-weight: 100
-                      font-size: 12px
+                      font-size: 9px
                       margin: 0
+                      padding-left: 10px
                 &--NewDeaths
                     color: #6C757D
+                    display: flex
+                    align-items: center
                     p
                       font-weight: 100
-                      font-size: 12px
+                      font-size: 9px
                       margin: 0
+                      padding-left: 10px
                 &--recovered
                     color: #28A745
+                    display: flex
+                    align-items: center
                     p
                       font-weight: 100
-                      font-size: 12px
+                      font-size: 9px
                       margin: 0
-                &--deceased
+                      padding-left: 10px
+                &--active
                     color: #007BFF
+                    //display: flex
+                    //align-items: center
                     p
                       font-weight: 100
-                      font-size: 12px
+                      font-size: 9px
                       margin: 0
+                      padding-left: 10px
 .null-msg
   font-size: 20px !important
   margin-right: 1vw !important
@@ -461,7 +561,7 @@ export default {
 .additional-data-box
   width: 82vw
   height: auto
-  margin: 2em auto 10vh
+  margin: 3em auto 10vh
   display: flex
   box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.08)
   flex-direction: column
@@ -478,7 +578,7 @@ export default {
         position: static
         font-style: normal
         font-weight: bold
-        font-size: 10px
+        font-size: 8px
         line-height: 14px
         letter-spacing: 0.05em
         text-transform: uppercase
@@ -510,10 +610,14 @@ export default {
             font-weight: 100
             font-size: 12px
             margin: 0
-        &--deceased
+        &--active
           color: #007BFF
           p
             font-weight: 100
             font-size: 12px
             margin: 0
+.planet-chart
+  height: 37px !important
+  width: 74px !important
+  margin: 5px auto 10px
 </style>
