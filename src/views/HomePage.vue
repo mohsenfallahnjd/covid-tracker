@@ -473,8 +473,8 @@ export default {
       font-size: 20px
 .boxs
     width: 90vw
-    height: 90vw
-    margin: -60px auto
+    //height: 90vw
+    margin: -4em auto
     display: flex
     // margin-bottom: 3em
     .boxs-col
@@ -569,7 +569,7 @@ export default {
 .additional-data-box
   width: 85vw
   height: 12vh
-  margin: 4.5em auto 10vh
+  margin: 6.5em auto 10vh
   display: flex
   box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.08)
   flex-direction: column
