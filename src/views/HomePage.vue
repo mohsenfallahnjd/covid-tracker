@@ -23,11 +23,11 @@
           <!--  -->
 
           <h3 class="country-name" v-else>
-          <img
-            class="country-name--image"
-            :src="countryData.countryInfo.flag"
-          />
-          
+            <img
+              class="country-name--image"
+              :src="countryData.countryInfo.flag"
+            />
+
             {{ countryData.country }}
             <router-link to="/CountrySelection">
               <b-icon-caret-down-fill class="select-country" />
@@ -253,7 +253,8 @@ export default {
     show: false,
     badResponse: false
   }),
-  beforeMount() {
+  // beforeMount() {},
+  mounted() {
     this.countrySelected = localStorage.getItem("countrySelected");
     if (!this.countrySelected) {
       this.nullMsg = true;
@@ -264,9 +265,7 @@ export default {
         this.reloadPage();
       }
     }
-  },
-  mounted() {
-    this.countryData = JSON.parse(localStorage.getItem("dataCountry"));
+    this.countryData = JSON.parse(localStorage.getItem("countryData"));
   },
   methods: {
     reloadPage() {
@@ -276,7 +275,7 @@ export default {
       axios
         .get(`https://corona.lmao.ninja/countries/${this.countrySelected}`)
         .then(response => {
-          localStorage.setItem("dataCountry", JSON.stringify(response.data));
+          localStorage.setItem("countryData", JSON.stringify(response.data));
           if (response.status === 200) {
             this.show = false;
             location.reload();
