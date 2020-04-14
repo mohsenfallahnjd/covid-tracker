@@ -472,13 +472,13 @@ export default {
       font-weight: normal
       font-size: 20px
 .boxs
-    width: 90vw
+    width: 88vw
     //height: 90vw
     margin: -4em auto
     display: flex
     // margin-bottom: 3em
     .boxs-col
-        padding: 0px 10px
+        padding: 0px 0.5em
         .confirmed-box
             margin: 10% 0px
             height: 45%
@@ -567,7 +567,7 @@ export default {
     align-self: center
     font-weight: 900
 .additional-data-box
-  width: 85vw
+  width: 83vw
   height: 12vh
   margin: 6.5em auto 10vh
   display: flex
