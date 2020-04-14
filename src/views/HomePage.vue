@@ -503,7 +503,7 @@ export default {
                 font-style: normal
                 font-weight: bold
                 // font-weight: 800
-                font-size: 21px
+                font-size: 20px
                 line-height: 30px
                 flex: none
                 order: 0
@@ -518,7 +518,7 @@ export default {
                       font-weight: 100
                       font-size: 9px
                       margin: 0
-                      padding-left: 10px
+                      padding-left: 6px
                 &--NewDeaths
                     color: #6C757D
                     display: flex
@@ -527,7 +527,7 @@ export default {
                       font-weight: 100
                       font-size: 9px
                       margin: 0
-                      padding-left: 10px
+                      padding-left: 6px
                 &--recovered
                     color: #28A745
                     display: flex
@@ -536,7 +536,7 @@ export default {
                       font-weight: 100
                       font-size: 10px
                       margin: 0
-                      padding-left: 10px
+                      padding-left: 6px
                       
                 &--active
                     color: #007BFF
@@ -568,7 +568,7 @@ export default {
     font-weight: 900
 .additional-data-box
   width: 85vw
-  height: auto
+  height: 12vh
   margin: 4.5em auto 10vh
   display: flex
   box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.08)
