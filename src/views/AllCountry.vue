@@ -33,20 +33,29 @@
           <b-row class="country-list__item--datail-row">
             <span>
               <div class="detail-title">total</div>
-              <div class="detail-number total">
+              <div
+                v-if="formatNumber(worldData.cases) !== 'undefined'"
+                class="detail-number total"
+              >
                 {{ formatNumber(worldData.cases) }}
               </div>
             </span>
             <span>
               <div class="detail-title">confirmed</div>
-              <div class="detail-number confirmed">
+              <div
+                v-if="formatNumber(worldData.todayCases) !== 'undefined'"
+                class="detail-number confirmed"
+              >
                 <b-icon-arrow-up />
                 {{ formatNumber(worldData.todayCases) }}
               </div>
             </span>
             <span>
               <div class="detail-title">serious critical</div>
-              <div class="detail-number confirmed">
+              <div
+                v-if="formatNumber(worldData.critical) !== 'undefined'"
+                class="detail-number confirmed"
+              >
                 {{ formatNumber(worldData.critical) }}
               </div>
             </span>
@@ -54,20 +63,29 @@
           <b-row class="country-list__item--datail-row">
             <span>
               <div class="detail-title">total deaths</div>
-              <div class="detail-number deaths">
+              <div
+                v-if="formatNumber(worldData.deaths) !== 'undefined'"
+                class="detail-number deaths"
+              >
                 {{ formatNumber(worldData.deaths) }}
               </div>
             </span>
             <span>
               <div class="detail-title">deaths</div>
-              <div class="detail-number deaths">
+              <div
+                v-if="formatNumber(worldData.todayDeaths) !== 'undefined'"
+                class="detail-number deaths"
+              >
                 <b-icon-arrow-up />
                 {{ formatNumber(worldData.todayDeaths) }}
               </div>
             </span>
             <span>
               <div class="detail-title">total recovered</div>
-              <div class="detail-number recovered">
+              <div
+                v-if="formatNumber(worldData.recovered) !== 'undefined'"
+                class="detail-number recovered"
+              >
                 {{ formatNumber(worldData.recovered) }}
               </div>
             </span>
@@ -75,7 +93,10 @@
           <b-row class="country-list__item--datail-row">
             <span class="detail-title--end">
               <div class="detail-title--end--title">active cases</div>
-              <div class="detail-title--end--number actived">
+              <div
+                v-if="formatNumber(worldData.active) !== 'undefined'"
+                class="detail-title--end--number actived"
+              >
                 {{ formatNumber(worldData.active) }}
               </div>
             </span>
@@ -217,19 +238,19 @@ export default {
     worldData: {},
     date: {},
     badResponse: false,
-    loadingSpin: true
+    loadingSpin: true,
   }),
   beforeMount() {
     axios
       .get("https://corona.lmao.ninja/countries?sort=cases")
-      .then(response => {
+      .then((response) => {
         this.rankList = response.data;
         this.loadingSpin = false;
         if (response.status !== 200) {
           this.badResponse = true;
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error, "get CountryList in AllCountry error");
         this.loadingSpin = false;
         this.badResponse = true;
@@ -238,14 +259,14 @@ export default {
     // world
     axios
       .get("https://corona.lmao.ninja/all")
-      .then(response => {
+      .then((response) => {
         this.worldData = response.data;
         this.loadingSpin = false;
         if (response.status !== 200) {
           this.badResponse = true;
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error, "get worldData in AllCountry error");
         this.loadingSpin = false;
         this.badResponse = true;
@@ -264,8 +285,8 @@ export default {
     formatNumber(num) {
       num = `${num}`;
       return num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -306,7 +327,7 @@ export default {
         color: #1C2C40
         //align-self: flex-start
         margin: 0px 0px 10px 6px
-        // display: flex 
+        // display: flex
         .reload-page
           margin-left: auto
       &--image

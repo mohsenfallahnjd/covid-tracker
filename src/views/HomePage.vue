@@ -55,10 +55,13 @@
               Confirmed
             </p>
             <div class="confirmed-box--number">
-              <span class="confirmed-box--number--confirmed">
+              <span
+                v-if="formatNumber(countryData.todayCases) !== 'undefined'"
+                class="confirmed-box--number--confirmed"
+              >
                 <span>
                   <b-icon-arrow-up class="arrow" />
-                  {{ formatNumber(countryData.todayCases)  }}
+                  {{ formatNumber(countryData.todayCases) }}
                 </span>
                 <p>{{ formatNumber(countryData.cases) }}</p>
               </span>
@@ -75,7 +78,10 @@
               Recovered
             </p>
             <div class="confirmed-box--number padding-zero">
-              <span class="confirmed-box--number--recovered">
+              <span
+                v-if="formatNumber(countryData.recovered) !== 'undefined'"
+                class="confirmed-box--number--recovered"
+              >
                 {{ formatNumber(countryData.recovered) }}
                 <p>
                   <b-icon-shield-shaded />
@@ -95,7 +101,10 @@
               active
             </p>
             <div class="confirmed-box--number">
-              <span class="confirmed-box--number--active">
+              <span
+                v-if="formatNumber(countryData.active) !== 'undefined'"
+                class="confirmed-box--number--active"
+              >
                 {{ formatNumber(countryData.active) }}
                 <p class="critical-case">
                   <b-icon-exclamation-circle style="font-size:15px" />
@@ -112,7 +121,10 @@
               Deaths
             </p>
             <div class="confirmed-box--number padding-zero">
-              <span class="confirmed-box--number--NewDeaths">
+              <span
+                v-if="formatNumber(countryData.todayDeaths) !== 'undefined'"
+                class="confirmed-box--number--NewDeaths"
+              >
                 <span>
                   <b-icon-arrow-up class="arrow" />
                   {{ formatNumber(countryData.todayDeaths) }}
@@ -136,7 +148,10 @@
               tests:
             </p>
             <div class="data-box--number padding-zero">
-              <span class="data-box--number">
+              <span
+                v-if="formatNumber(countryData.tests) !== 'undefined'"
+                class="data-box--number"
+              >
                 {{ formatNumber(countryData.tests) }}
               </span>
             </div>
@@ -146,7 +161,12 @@
               tests.pom:
             </p>
             <div class="data-box--number padding-zero">
-              <span class="data-box--number">
+              <span
+                v-if="
+                  formatNumber(countryData.testsPerOneMillion) !== 'undefined'
+                "
+                class="data-box--number"
+              >
                 {{ formatNumber(countryData.testsPerOneMillion) }}
               </span>
             </div>
@@ -158,7 +178,12 @@
               cases.pom:
             </p>
             <div class="data-box--number padding-zero">
-              <span class="data-box--number--confirmed">
+              <span
+                v-if="
+                  formatNumber(countryData.casesPerOneMillion) !== 'undefined'
+                "
+                class="data-box--number--confirmed"
+              >
                 {{ formatNumber(countryData.casesPerOneMillion) }}
               </span>
             </div>
@@ -168,7 +193,12 @@
               deaths.pom:
             </p>
             <div class="data-box--number padding-zero">
-              <span class="data-box--number--NewDeaths">
+              <span
+                v-if="
+                  formatNumber(countryData.deathsPerOneMillion) !== 'undefined'
+                "
+                class="data-box--number--NewDeaths"
+              >
                 {{ formatNumber(countryData.deathsPerOneMillion) }}
               </span>
             </div>
@@ -262,9 +292,10 @@ export default {
     nullMsg: true,
     show: false,
     badResponse: false,
-    chartData: {}
+    chartData: {},
   }),
   mounted() {
+    this.getLocation()
     this.countrySelected = localStorage.getItem("countrySelected");
     if (!this.countrySelected) {
       this.nullMsg = true;
@@ -293,7 +324,7 @@ export default {
 
       axios
         .get(`https://corona.lmao.ninja/countries/${this.countrySelected}`)
-        .then(response => {
+        .then((response) => {
           localStorage.setItem("countryData", JSON.stringify(response.data));
           if (response.status === 200) {
             this.show = false;
@@ -307,7 +338,7 @@ export default {
             );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           this.badResponse = true;
           console.log(error, "reloadFunction in HomePage error");
         });
@@ -325,13 +356,13 @@ export default {
             "countrySelected"
           )}`
         )
-        .then(response => {
+        .then((response) => {
           localStorage.setItem(
             "chartData",
             JSON.stringify(response.data.timeline)
           );
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error, "chartDataConfirmed.js error");
         });
     },
@@ -348,9 +379,9 @@ export default {
               data: Object.values(item),
               fill: false,
               borderColor: borderColor,
-              borderWidth: 3
-            }
-          ]
+              borderWidth: 3,
+            },
+          ],
         },
         options: {
           responsive: true,
@@ -359,43 +390,57 @@ export default {
             xAxes: [
               {
                 gridLines: {
-                  display: false
+                  display: false,
                 },
 
                 ticks: {
-                  display: false
-                }
-              }
+                  display: false,
+                },
+              },
             ],
             yAxes: [
               {
                 gridLines: {
-                  display: false
+                  display: false,
                 },
                 ticks: {
-                  display: false
-                }
-              }
-            ]
+                  display: false,
+                },
+              },
+            ],
           },
           elements: {
             point: {
-              radius: 0
-            }
-          }
-        }
+              radius: 0,
+            },
+          },
+        },
       });
     },
     formatNumber(num) {
       num = `${num}`;
       return num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-    }
+    },
+    getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.showPosition);
+      } else {
+        console.log("Geo Location not supported by browser");
+      }
+    },
+    showPosition(position) {
+      var location = {
+        longitude: position.coords.longitude,
+        latitude: position.coords.latitude,
+      };
+      console.log(location);
+    },
   },
   computed: {
     lastUpdate() {
       return moment(moment(this.countryData.updated).utc(false)).fromNow();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -537,7 +582,7 @@ export default {
                       font-size: 10px
                       margin: 0
                       padding-left: 6px
-                      
+
                 &--active
                     color: #007BFF
                     //display: flex
