@@ -295,9 +295,9 @@ export default {
     chartData: {},
   }),
   mounted() {
-    this.getLocation()
     this.countrySelected = localStorage.getItem("countrySelected");
     if (!this.countrySelected) {
+      this.getLocation();
       this.nullMsg = true;
     } else {
       this.nullMsg = false;
@@ -429,11 +429,25 @@ export default {
       }
     },
     showPosition(position) {
-      var location = {
-        longitude: position.coords.longitude,
-        latitude: position.coords.latitude,
-      };
-      console.log(location);
+      // var location = {
+      //   longitude: position.coords.longitude,
+      //   latitude: position.coords.latitude,
+      // };
+      // console.log(location);
+      axios
+        .get(
+          `http://api.geonames.org/countryCodeJSON?lat=${position.coords.latitude}&lng=${position.coords.longitude}&username=samcharly`
+        )
+        .then((response) => {
+          localStorage.setItem(
+            "countrySelected",
+            JSON.stringify(response.data.countryName)
+          );
+        })
+        .catch((error) => {
+          this.badResponse = true;
+          console.log(error, "Get Location in HomePage error");
+        });
     },
   },
   computed: {
