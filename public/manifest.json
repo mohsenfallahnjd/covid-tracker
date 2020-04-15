@@ -1,8 +1,8 @@
 {
     "name": "Coronavirus Tracker",
     "short_name": "CovidTracker",
-    "theme_color": "#FFFFFF",
-    "background_color": "#222b45",
+    "theme_color": "#222b45",
+    "background_color": "#ffffff",
     "display": "standalone",
     "orientation": "portrait",
     "Scope": "/",

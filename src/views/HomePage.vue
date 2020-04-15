@@ -297,7 +297,9 @@ export default {
   mounted() {
     this.countrySelected = localStorage.getItem("countrySelected");
     if (!this.countrySelected) {
-      this.getLocation();
+      // this.getLocation();
+      // localStorage.setItem("countrySelected", "Iran"); //default country
+      // this.reloadPage();
       this.nullMsg = true;
     } else {
       this.nullMsg = false;
@@ -421,34 +423,35 @@ export default {
       num = `${num}`;
       return num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     },
-    getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(this.showPosition);
-      } else {
-        console.log("Geo Location not supported by browser");
-      }
-    },
-    showPosition(position) {
-      // var location = {
-      //   longitude: position.coords.longitude,
-      //   latitude: position.coords.latitude,
-      // };
-      // console.log(location);
-      axios
-        .get(
-          `http://api.geonames.org/countryCodeJSON?lat=${position.coords.latitude}&lng=${position.coords.longitude}&username=samcharly`
-        )
-        .then((response) => {
-          localStorage.setItem(
-            "countrySelected",
-            JSON.stringify(response.data.countryName)
-          );
-        })
-        .catch((error) => {
-          this.badResponse = true;
-          console.log(error, "Get Location in HomePage error");
-        });
-    },
+    // getLocation() {
+    //   if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(this.showPosition);
+    //   } else {
+    //     console.log("Geo Location not supported by browser");
+    //   }
+    // },
+    // showPosition(position) {
+    // var location = {
+    //   longitude: position.coords.longitude,
+    //   latitude: position.coords.latitude,
+    // };
+    // console.log(location);
+
+    //   axios
+    //     .get(
+    //       `http://api.geonames.org/countryCodeJSON?lat=${position.coords.latitude}&lng=${position.coords.longitude}&username=samcharly`
+    //     )
+    //     .then((response) => {
+    //       localStorage.setItem(
+    //         "countrySelected",
+    //         JSON.stringify(response.data.countryName)
+    //       );
+    //     })
+    //     .catch((error) => {
+    //       this.badResponse = true;
+    //       console.log(error, "Get Location in HomePage error");
+    //     });
+    // },
   },
   computed: {
     lastUpdate() {
