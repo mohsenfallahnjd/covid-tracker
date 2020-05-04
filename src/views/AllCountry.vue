@@ -17,12 +17,17 @@
       <!--  -->
 
       <!-- World -->
-      <b-list-group-item class="country-list__item" lazy>
+      <b-list-group-item class="country-list__item first-item" lazy>
         <b-row class="country-list__item--title">
-          world
-          <router-link class="more-data" to="/WorldStatistics">
+          <img
+            class="country-list__item--image"
+            style="width: 23px"
+            src="../assets/img/internet.png"
+          />
+          Global
+          <router-link class="more-data" :to="{ name: 'WorldStatistics' }">
             <b-icon-clipboard-data class="more-data--icon" />
-            More Data
+            See More Data
           </router-link>
           <span class="reload-page">
             <b-icon-arrow-repeat @click="reloadPage()" />
@@ -193,19 +198,27 @@
         </span>
       </b-list-group-item>
       <!--  -->
+      <!-- LoadMore -->
+      <b-list-group-item
+        v-if="loadingSpin === false"
+        class="country-list__item loading"
+      >
+        <b-icon-plus-circle @click="addCountry()" />
+      </b-list-group-item>
+      <!--  -->
     </b-list-group>
 
     <!-- IconBar -->
     <b-card class="navbar-icon" no-body>
       <b-nav card-header tabs>
-        <b-nav-item to="/HomePage">
+        <b-nav-item :to="{ name: 'HomePage' }">
           <img src="../assets/img/logo.svg" alt="home-page" />
           <span class="caption">
             Home
           </span>
         </b-nav-item>
 
-        <b-nav-item class="active-line" to="/AllCountry">
+        <b-nav-item class="active-line" :to="{ name: 'AllCountry' }">
           <img src="../assets/img/countryActive.svg" alt="all-country" />
           <span class="caption active-color">
             Countries Ranking
@@ -234,17 +247,21 @@ import moment from "moment";
 export default {
   name: "TopTen",
   data: () => ({
-    rankList: {},
+    rankList: [],
+    allCountry: {},
     worldData: {},
     date: {},
+    countryCounter: 0,
     badResponse: false,
     loadingSpin: true,
   }),
   beforeMount() {
     axios
-      .get("https://corona.lmao.ninja/countries?sort=cases")
+      .get("https://corona.lmao.ninja/v2/countries?sort=cases")
       .then((response) => {
-        this.rankList = response.data;
+        // this.rankList = response.data;
+        this.allCountry = response.data;
+        this.addCountry();
         this.loadingSpin = false;
         if (response.status !== 200) {
           this.badResponse = true;
@@ -258,7 +275,7 @@ export default {
 
     // world
     axios
-      .get("https://corona.lmao.ninja/all")
+      .get("https://corona.lmao.ninja/v2/all")
       .then((response) => {
         this.worldData = response.data;
         this.loadingSpin = false;
@@ -286,6 +303,12 @@ export default {
       num = `${num}`;
       return num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     },
+    addCountry() {
+      for (let i = 0; i < 10; i++) {
+        this.rankList.push(this.allCountry[this.countryCounter]);
+        this.countryCounter++;
+      }
+    },
   },
 };
 </script>
@@ -296,13 +319,13 @@ export default {
   position: relative
   width: 100%
   height: 100%
-  background: #FFFFFF
   .country-list
-    margin-top: 3vh
     margin-bottom: 9vh
     // overflow-y: scroll
     display: flex
     align-items: center
+    .first-item
+      margin-top: 3vh
     &__item
       display: flex
       flex-direction: column
@@ -325,14 +348,12 @@ export default {
         font-size: 18px
         line-height: 22px
         color: #1C2C40
-        //align-self: flex-start
         margin: 0px 0px 10px 6px
-        // display: flex
         .reload-page
           margin-left: auto
       &--image
-        width: 31.5px //8vw
-        height: 21px //5vw
+        width: 38px //8vw
+        height: 23px //5vw
         object-fit: cover
         margin-right: 0.8em
         margin-bottom: 0.8vh
@@ -398,9 +419,6 @@ export default {
 .last-update
   font-size: 9px !important
   font-weight: 500
-
-  // margin: auto
-  // margin-left: 3em
 .rank-num
     font-size: 10px
     margin-right: 0.5em

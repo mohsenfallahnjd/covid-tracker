@@ -41,9 +41,6 @@
           @click="changeRoute(countries.country)"
         >
           <span class="country-list__item--country">
-            <!-- <img
-              :src="`http://www.countryflags.io/${countries.flag}/shiny/16.png`"
-            /> -->
             <img :src="countries.countryInfo.flag" />
             {{ countries.country }}
           </span>
@@ -79,7 +76,7 @@ export default {
   beforeMount() {
     axios
       .get(
-        "https://corona.lmao.ninja/countries"
+        "https://corona.lmao.ninja/v2/countries"
       )
       .then(response => {
         this.countryList = response.data.sort(function(a, b) {

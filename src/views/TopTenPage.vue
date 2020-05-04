@@ -73,19 +73,19 @@
     <!-- IconBar -->
     <b-card class="navbar-icon" no-body>
       <b-nav card-header tabs>
-        <b-nav-item to="/AllCountry">
+        <b-nav-item :to="{ name: 'AllCountry' }">
           <img src="../assets/img/country.svg" alt="all-country" />
           <span class="caption">
             A.countries
           </span>
         </b-nav-item>
-        <b-nav-item to="/HomePage">
+        <b-nav-item :to="{ name: 'HomePage' }">
           <img src="../assets/img/logo.svg" alt="home-page" />
           <span class="caption">
             Home
           </span>
         </b-nav-item>
-        <b-nav-item class="active-line" to="/TopTenPage">
+        <b-nav-item class="active-line" :to="{ name: 'TopTenPage' }">
           <img src="../assets/img/topTenActive.svg" alt="top-ten" />
           <span class="caption active-color">
             Top10

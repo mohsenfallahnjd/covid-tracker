@@ -125,7 +125,7 @@
             <span class="detail-title--end">
               <div class="detail-title--end--title">general death rate</div>
               <div class="detail-title--end--number confirmed">
-                {{ worldData.general_death_rate }}
+                {{ worldData.general_death_rate | two_digit }}
               </div>
             </span>
           </b-row>
@@ -145,19 +145,19 @@ export default {
     worldData: {},
     date: {},
     badResponse: false,
-    loadingSpin: true
+    loadingSpin: true,
   }),
   beforeMount() {
     axios
       .get(
         "https://corona-virus-stats.herokuapp.com/api/v1/cases/general-stats"
       )
-      .then(response => {
+      .then((response) => {
         this.worldData = response.data.data;
         this.date = response.data.data.last_update;
         this.loadingSpin = false;
       })
-      .catch(error => {
+      .catch((error) => {
         this.loadingSpin = false;
         this.badResponse = true;
         console.log(error);
@@ -168,7 +168,7 @@ export default {
       return moment(
         moment(this.date, ["DDMMMMY HH:mm", "MMMMDDY HH:mm"]).utc(true)
       ).fromNow();
-    }
+    },
   },
   methods: {
     goBack() {
@@ -176,8 +176,14 @@ export default {
     },
     reloadPage() {
       location.reload();
-    }
-  }
+    },
+  },
+  filters: {
+    two_digit: (value) => {
+      if (!value) return "";
+      return Number(value).toFixed(2);
+    },
+  },
 };
 </script>
 

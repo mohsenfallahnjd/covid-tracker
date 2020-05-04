@@ -7,28 +7,23 @@
 <script>
 export default {
   name: "App",
-  // beforeMount() {
-    // if (navigator.geolocation) {
-    //   console.log("Geolocation is supported!");
-    // } else {
-    //   console.log("Geolocation is not supported for this Browser/OS.");
-    // }
-  // },
 };
 </script>
 
 <style lang="sass">
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap')
+// body
+//   background: #222b45 //add the last
 #app
   position: relative
-  width: 100vw
+  width: 100%
   height: 100vh
   background: #FFFFFF
   font-family: 'Varela Round', sans-serif
   .navbar-icon
     position: fixed
     width: 100vw
-    height: 49px
+    height: 4em
     left: 0px
     bottom: 0px
     background: #FFFFFF
@@ -43,6 +38,7 @@ export default {
       color: #6C757D
   .active-line
     border-top: 2px solid #EB5569
+    outline: none
   .active-color
     color: #EB5569 !important
 </style>

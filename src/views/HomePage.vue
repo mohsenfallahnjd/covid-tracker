@@ -5,6 +5,7 @@
         <img
           src="../assets/img/homeHeader.svg"
           class="header-container--background"
+          alt="header-container--background"
         />
 
         <!-- title -->
@@ -60,10 +61,12 @@
                 class="confirmed-box--number--confirmed"
               >
                 <span>
+                  {{ formatNumber(countryData.cases) }}
+                </span>
+                <p>
                   <b-icon-arrow-up class="arrow" />
                   {{ formatNumber(countryData.todayCases) }}
-                </span>
-                <p>{{ formatNumber(countryData.cases) }}</p>
+                </p>
               </span>
             </div>
             <div class="planet-chart">
@@ -126,10 +129,12 @@
                 class="confirmed-box--number--NewDeaths"
               >
                 <span>
+                  {{ formatNumber(countryData.deaths) }}
+                </span>
+                <p>
                   <b-icon-arrow-up class="arrow" />
                   {{ formatNumber(countryData.todayDeaths) }}
-                </span>
-                <p>{{ formatNumber(countryData.deaths) }}</p>
+                </p>
               </span>
             </div>
             <div class="planet-chart">
@@ -250,14 +255,14 @@
     <!-- IconBar -->
     <b-card class="navbar-icon" no-body>
       <b-nav card-header tabs>
-        <b-nav-item class="active-line" to="/HomePage">
+        <b-nav-item class="active-line" :to="{ name: 'HomePage' }">
           <img src="../assets/img/homePageActive.svg" alt="home-page" />
           <span class="caption active-color">
             Home
           </span>
         </b-nav-item>
 
-        <b-nav-item to="/AllCountry">
+        <b-nav-item :to="{ name: 'AllCountry' }">
           <img src="../assets/img/country.svg" alt="all-country" />
           <span class="caption">
             Countries Ranking
@@ -325,7 +330,7 @@ export default {
       this.planetChartData();
 
       axios
-        .get(`https://corona.lmao.ninja/countries/${this.countrySelected}`)
+        .get(`https://corona.lmao.ninja/v2/countries/${this.countrySelected}`)
         .then((response) => {
           localStorage.setItem("countryData", JSON.stringify(response.data));
           if (response.status === 200) {
@@ -336,7 +341,7 @@ export default {
 
             console.log(
               response.status,
-              "response log in reloadFunction at HomePage"
+              "response error log in reloadFunction at HomePage"
             );
           }
         })
@@ -423,35 +428,6 @@ export default {
       num = `${num}`;
       return num.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     },
-    // getLocation() {
-    //   if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(this.showPosition);
-    //   } else {
-    //     console.log("Geo Location not supported by browser");
-    //   }
-    // },
-    // showPosition(position) {
-    // var location = {
-    //   longitude: position.coords.longitude,
-    //   latitude: position.coords.latitude,
-    // };
-    // console.log(location);
-
-    //   axios
-    //     .get(
-    //       `http://api.geonames.org/countryCodeJSON?lat=${position.coords.latitude}&lng=${position.coords.longitude}&username=samcharly`
-    //     )
-    //     .then((response) => {
-    //       localStorage.setItem(
-    //         "countrySelected",
-    //         JSON.stringify(response.data.countryName)
-    //       );
-    //     })
-    //     .catch((error) => {
-    //       this.badResponse = true;
-    //       console.log(error, "Get Location in HomePage error");
-    //     });
-    // },
   },
   computed: {
     lastUpdate() {
@@ -465,7 +441,7 @@ export default {
 .home-page
     position: relative
     width: 100%
-    height: 100%
+    height: 100vh
     background: #FFFFFF
     overflow-y: scroll
 .header-container
@@ -476,7 +452,7 @@ export default {
     padding: 0
     &--background
         height: 100%
-        width: 100vw
+        width: 100%
         object-fit: cover
     .header-title
         position: absolute
@@ -543,13 +519,13 @@ export default {
         padding: 0px 0.5em
         .confirmed-box
             margin: 10% 0px
-            height: 45%
+            height: 40vw
             background: #FFFFFF
             box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.08)
             display: flex
             flex-direction: column
             justify-content: center
-            border-radius: 10px
+            border-radius: 3px
             width: auto
             &--title
                 font-style: normal
@@ -565,7 +541,7 @@ export default {
                 font-style: normal
                 font-weight: bold
                 // font-weight: 800
-                font-size: 20px
+                font-size: 21px
                 line-height: 30px
                 flex: none
                 order: 0
@@ -578,7 +554,7 @@ export default {
                     align-items: center
                     p
                       font-weight: 100
-                      font-size: 9px
+                      font-size: 10px
                       margin: 0
                       padding-left: 6px
                 &--NewDeaths
@@ -587,7 +563,7 @@ export default {
                     align-items: center
                     p
                       font-weight: 100
-                      font-size: 9px
+                      font-size: 10px
                       margin: 0
                       padding-left: 6px
                 &--recovered
@@ -606,7 +582,7 @@ export default {
                     //align-items: center
                     p
                       font-weight: 100
-                      font-size: 12px
+                      font-size: 10px
                       margin: 0
                       padding-left: 10px
                       margin-top: 15px
@@ -618,7 +594,7 @@ export default {
 .padding-zero
   padding: 0px !important
 .arrow
-  font-size: 20px
+  font-size: 10px
 .critical-case
   color: #FFB100
 .bad-response
@@ -631,11 +607,11 @@ export default {
 .additional-data-box
   width: 83vw
   height: 12vh
-  margin: 6.5em auto 10vh
+  margin: 5em auto
   display: flex
   box-shadow: 0px 8px 40px rgba(28, 44, 64, 0.08)
   flex-direction: column
-  border-radius: 10px
+  border-radius: 3px
   &--col
     display: flex
     flex-direction: row
@@ -687,7 +663,7 @@ export default {
             font-size: 12px
             margin: 0
 .planet-chart
-  height: 37px !important
-  width: 74px !important
+  height: 40px !important
+  width: 80px !important
   margin: 5px auto 10px
 </style>
