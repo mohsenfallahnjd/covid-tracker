@@ -311,6 +311,8 @@ export default {
       if (JSON.parse(localStorage.getItem("flag")) === false) {
         localStorage.setItem("flag", true);
         this.reloadPage();
+      } else {
+        this.planetChartData();
       }
     }
     this.countryData = JSON.parse(localStorage.getItem("countryData"));
