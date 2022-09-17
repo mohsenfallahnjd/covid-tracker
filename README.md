@@ -1,4 +1,7 @@
-# covid-tracker
+# covid tracker
+
+A PWA of convid tracker for all contry and their stats.
+
 
 ## Project setup
 ```
